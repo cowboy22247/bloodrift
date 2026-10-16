@@ -246,7 +246,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
     <div class="row"><button id="btnRestore" hidden>看廣告保留全部戰利品</button><button class="big" id="btnResTown">回城</button><button id="btnLog">複製遊玩紀錄</button></div>
   </div>
 </div>
-<script>window.BR_PLATFORM="web";window.BR_VERSION="20261016-1813";</script>
+<script>window.BR_PLATFORM="web";window.BR_VERSION="20261016-2118";</script>
 <script>
 (()=>{
 'use strict';
@@ -374,7 +374,7 @@ const EAFF={
   poison:{name:'毒霧'},arcane:{name:'奧術'},regen:{name:'再生'},horde:{name:'群集'},mortar:{name:'迫擊'},vortex:{name:'漩渦'},knockback:{name:'震擊'},illusion:{name:'幻影'},
 };
 const BOSSES={
-  butcher:{name:'剁骨者',hp:850,dmg:22,ms:58,r:30,xp:60,col:'#8e2a2a',ai:'charge',line:'骨頭……留給我。'},
+  butcher:{name:'剁骨者',hp:850,dmg:16,ms:58,r:30,xp:60,col:'#8e2a2a',ai:'charge',line:'骨頭……留給我。'},
   spider:{name:'蛛后',hp:1700,dmg:18,ms:40,r:34,xp:90,col:'#3a3a2a',ai:'spider',line:'我的孩子們，餓了……'},
   guardian:{name:'深淵看守者',hp:3800,dmg:30,ms:52,r:38,xp:150,col:'#4a1a5a',ai:'guardian',line:'裂隙不會放你走。'},
   lich:{name:'巫妖',hp:1500,dmg:20,ms:46,r:30,xp:100,col:'#8a7aa0',ai:'lich',line:'你的骨頭會為我效力。'},
@@ -559,6 +559,9 @@ function spawnBoss(idx){
   if(S.nemesis===id){e.nem=true;e.name='復仇者 '+e.name;e.hpMax*=1.25;e.dmg*=1.15;}
   e.hp=e.hpMax;E.push(e);G.boss=e;
   AU.boss();CAM.shake=RM?0:14;toast(`${e.name}：「${b.line}」`);
+  if(id==='butcher')tip('butcher','剁骨者會先畫出紅色箭頭再衝過來。看到箭頭就往側邊走，別直線後退。');
+  if(id==='spider')tip('spider','蛛后會一直生小蜘蛛，先清小的再打她；被蛛網打中會變慢。');
+  if(id==='lich')tip('lich','巫妖的紫色彈會追人，繞圈跑讓它撞到怪群。');
   $('#bossbar').hidden=false;$('#bossName').textContent=e.name;
 }
 function spawnGoblin(){
@@ -826,7 +829,7 @@ function bossAI(e,dt,dx,dy,d,spd){
     return;}
   // chase
   e.x+=dx*spd*dt;e.y+=dy*spd*dt;
-  if(e.t.ai==='charge'||e.t.ai==='guardian'){if(e.tm.a<=0&&d<420&&d>60){e.tm.a=e.t.ai==='guardian'?6:4;e.st='tele';e.stT=.8;e.dir={x:dx,y:dy};FX.push({k:'tele',x:e.x,y:e.y,dx,dy,t:0,life:.8,len:Math.min(d+80,400)});}}
+  if(e.t.ai==='charge'||e.t.ai==='guardian'){if(e.tm.a<=0&&d<420&&d>60){e.tm.a=e.t.ai==='guardian'?6:4;e.st='tele';e.stT=S.torment<=2?1.15:.8;e.dir={x:dx,y:dy};FX.push({k:'tele',x:e.x,y:e.y,dx,dy,t:0,life:.8,len:Math.min(d+80,400)});}}
   if(e.t.ai==='spider'){if(e.tm.a<=0){e.tm.a=3;for(let k=0;k<3;k++)spawnEnemy('spider',{x:e.x+rnd(-30,30),y:e.y+rnd(-30,30)});}if(e.tm.b<=0&&d<380){e.tm.b=4.5;EP.push({k:'web',x:e.x,y:e.y,vx:dx*200,vy:dy*200,t:2.2,dmg:e.dmg*.5,proj:true});}}
   if(e.t.ai==='guardian'){if(e.tm.b<=0){e.tm.b=7;e.st='novaT';e.stT=1;FX.push({k:'ringT',x:e.x,y:e.y,r:170,t:0,life:1});}}
 }
@@ -968,6 +971,7 @@ function showResult(){
   t.style.textShadow=R.kind==='dead'?'0 0 24px rgba(200,40,40,.8)':'0 0 24px rgba(217,166,74,.7)';
   $('#resSub').textContent=R.kind==='dead'?`被 ${G.lastDmgSrc&&G.lastDmgSrc.name?G.lastDmgSrc.name:'裂隙'} 殺死 · 本局戰利品隨機掉了一半${G.lastDmgSrc&&G.lastDmgSrc.boss?' · 牠下一局會變成復仇者':''}`:R.kind==='tp'?'傳送門把你和全部戰利品送回城裡':`煉獄 ${S.torment} 通關！${S.torment<S.tormentMax?`煉獄 ${S.tormentMax} 已解鎖`:''}`;
   if(G.unlockMsg)$('#resSub').textContent+=' · '+G.unlockMsg;
+  if(R.kind==='dead'&&G.lastDmgSrc){const DT={butcher:'下次：看到紅色箭頭往側邊閃。回城買裝或先打煉獄 1 熱身。',spider:'下次：先清小蜘蛛，蛛網打中會變慢。',guardian:'下次：紫色圈縮起來時跑出圈外。',lich:'下次：繞圈跑，讓追蹤彈撞到怪。'};const k=G.lastDmgSrc.boss;if(k&&DT[k])$('#resSub').textContent+=' · '+DT[k];}
   const g=$('#resGrid');g.innerHTML='';
   [['存活時間',fmtT(G.t)],['擊殺',P.kills],['等級',P.lv],['金幣',P.gold],['超凡經驗','+'+Math.round(P.xpRun)],['首領',G.bossKilled.length+'/3']].forEach(([k,v])=>{const d=document.createElement('div');d.innerHTML=`<small>${k}</small><b>${v}</b>`;g.appendChild(d);});
   const L=$('#resLoot');let h='<h2 class="sec">戰利品</h2>';
