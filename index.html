@@ -205,7 +205,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
     <div class="cls-row" id="clsRow"></div>
     <div class="row"><button class="big" id="btnTown">進入城鎮</button><button id="btnRetro2"></button><button id="btnWipe">清除存檔</button></div>
     <p class="help" style="max-width:70ch;text-align:center">移動 <kbd>WASD</kbd>／方向鍵（手機：左半邊搖桿）・主動技 <kbd>空白鍵</kbd>・回城 <kbd>T</kbd>・戰利品包 <kbd>B</kbd>・暫停 <kbd>Esc</kbd>・選卡 <kbd>1</kbd>–<kbd>4</kbd></p>
-    <p class="credits">角色模型 KayKit（CC0）・部分場景素材由本機 AI 生成・試玩版 0.1</p>
+    <p class="credits">角色模型 KayKit（CC0）・部分場景素材由本機 AI 生成・匿名遊玩統計會回傳給作者調整難度・試玩版 0.1</p>
   </div>
 
   <div id="town" class="screen" hidden>
@@ -226,7 +226,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
         <div class="row" id="gambleRow"></div>
         <h2 class="sec" style="margin-top:6px">說明</h2>
         <p class="help">每局 10 分鐘。3:00 剁骨者、6:30 蛛后、10:00 深淵看守者。<br>精英怪身上有詞綴（疾速、燃跡、霜環…），黃色領隊必掉裝備。<br>白／藍裝自動分解成金幣；黃／橘裝會跳比較卡。<br><b style="color:#bcd0ff">回城符</b>：5:00 之後可用，吟唱 5 秒不能動，成功就把全部戰利品帶回城。<br><b style="color:#ffb0a0">死亡</b>：本局撿到的裝備隨機掉一半。殺死你的首領下一局會變成「復仇者」。<br>打倒 10:00 的守護者解鎖下一個煉獄等級。</p>
-        <div class="row"><button id="btnBack">回標題</button><button id="btnMute"></button><button id="btnZoom2"></button><button id="btnLog2">複製遊玩紀錄</button></div>
+        <div class="row"><button id="btnBack">回標題</button><button id="btnMute"></button><button id="btnZoom2"></button><button id="btnLog2">複製遊玩紀錄</button><button id="btnFb3">意見回饋</button></div>
       </section>
     </div>
   </div>
@@ -236,17 +236,18 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
   <div id="pk" class="modal" hidden><div><h2 id="pkTitle">撿到裝備</h2><div class="cmp" id="pkCmp"></div><div class="btns" id="pkBtns"></div></div></div>
   <div id="death" class="modal" hidden><div style="text-align:center"><h2>你倒下了</h2><p class="tag" id="deathSub">看一段廣告就能原地復活（每局一次），不看就接受死亡。</p><div class="btns"><button class="big" id="btnRevive">看廣告原地復活 <span class="key" style="font-size:10px">1</span></button><button id="btnDie">接受死亡 <span class="key" style="font-size:10px">2</span></button></div></div></div>
   <div id="adMock" class="modal" hidden><div style="text-align:center"><h2>廣告</h2><p class="tag" id="adMockT"></p><p class="help">本機測試用的模擬廣告，上架後由平台播真廣告</p></div></div>
+  <div id="fbBox" class="modal" hidden><div style="width:min(480px,100%)"><h2>意見回饋</h2><p class="help">哪裡太難、太無聊、看不懂、有 bug，一句話就好。匿名送給作者。</p><textarea id="fbTxt" maxlength="300" placeholder="例如：剁骨者太痛、手機搖桿太小…" style="width:100%;height:110px;box-sizing:border-box;background:#100c0a;color:var(--ink);border:1px solid var(--line2);font-size:14px;padding:8px"></textarea><div class="btns"><button class="big" id="btnFbSend">送出</button><button id="btnFbClose">關閉</button></div></div></div>
   <div id="logBox" class="modal" hidden><div style="width:min(560px,100%)"><h2>遊玩紀錄</h2><textarea id="logTxt" style="width:100%;height:220px;box-sizing:border-box;background:#100c0a;color:var(--ink);border:1px solid var(--line2);font-family:monospace;font-size:12px;padding:8px"></textarea><p class="help" id="logMsg"></p><div class="btns"><button id="btnLogClose">關閉</button></div></div></div>
-  <div id="pause" class="modal" hidden><div style="text-align:center"><h2>暫停</h2><div class="btns"><button id="btnResume">繼續 (Esc)</button><button id="btnMute2"></button><button id="btnRetro"></button><button id="btnZoom"></button><button id="btnGiveup">放棄本局（視同死亡）</button></div></div></div>
+  <div id="pause" class="modal" hidden><div style="text-align:center"><h2>暫停</h2><div class="btns"><button id="btnResume">繼續 (Esc)</button><button id="btnMute2"></button><button id="btnRetro"></button><button id="btnZoom"></button><button id="btnFb2">意見回饋</button><button id="btnGiveup">放棄本局（視同死亡）</button></div></div></div>
   <div id="result" class="screen" hidden>
     <h1 class="logo" id="resTitle" style="font-size:clamp(36px,8vw,64px)">你死了</h1>
     <p class="tag" id="resSub"></p>
     <div class="res" id="resGrid"></div>
     <div class="loot panel" id="resLoot"></div>
-    <div class="row"><button id="btnRestore" hidden>看廣告保留全部戰利品</button><button class="big" id="btnResTown">回城</button><button id="btnLog">複製遊玩紀錄</button></div>
+    <div class="row"><button id="btnRestore" hidden>看廣告保留全部戰利品</button><button class="big" id="btnResTown">回城</button><button id="btnLog">複製遊玩紀錄</button><button id="btnFb">意見回饋</button></div>
   </div>
 </div>
-<script>window.BR_PLATFORM="web";window.BR_VERSION="20261016-2118";</script>
+<script>window.BR_PLATFORM="web";window.BR_VERSION="20261017-1836";</script>
 <script>
 (()=>{
 'use strict';
@@ -959,7 +960,7 @@ function endRun(kind){
   for(const [sl,it] of Object.entries(P.eq)){if(!it)continue;if(lost.includes(it))continue;S.eq[cls][sl]=it.id;}
   trimStash();
   S.gold+=P.gold;S.xpTotal+=Math.round(P.xpRun);S.runs++;
-  if(!S.hist)S.hist=[];S.hist.push({d:new Date().toISOString().slice(5,16).replace('T',' '),map:S.map,tor:S.torment,cls:P.cls,kind,t:fmtT(G.t),lv:P.lv,kills:P.kills,yellow:found.filter(i=>i.q>=2).length,leg:found.filter(i=>i.q===3).length,killer:kind==='dead'&&G.lastDmgSrc?(G.lastDmgSrc.name||G.lastDmgSrc.k||''):'',revived:!!P.revived});if(S.hist.length>30)S.hist.splice(0,S.hist.length-30);
+  if(!S.hist)S.hist=[];S.hist.push({d:new Date().toISOString().slice(5,16).replace('T',' '),map:S.map,tor:S.torment,cls:P.cls,kind,t:fmtT(G.t),lv:P.lv,kills:P.kills,yellow:found.filter(i=>i.q>=2).length,leg:found.filter(i=>i.q===3).length,killer:kind==='dead'&&G.lastDmgSrc?(G.lastDmgSrc.name||G.lastDmgSrc.k||''):'',revived:!!P.revived});if(S.hist.length>30)S.hist.splice(0,S.hist.length-30);{const hr=S.hist[S.hist.length-1];TELE.send('run',{map:hr.map,tor:hr.tor,cls:hr.cls,kind:hr.kind,t:Math.round(G.t),lv:hr.lv,kills:hr.kills,yellow:hr.yellow,leg:hr.leg,killer:hr.killer,revived:hr.revived,runs:S.runs});}
   if(kind==='win'){S.wins++;if(S.torment===S.tormentMax&&S.tormentMax<8){S.tormentMax++;}if(S.map==='grave'&&!(S.maps&&S.maps.crypt)){S.maps=S.maps||{grave:true};S.maps.crypt=true;G.unlockMsg='新地圖解鎖：地窖';}}
   save();
   G.result={kind,kept,lost,lostEq,cls};
@@ -1362,6 +1363,17 @@ $('#btnWipe').onclick=()=>{const b=$('#btnWipe');if(b.dataset.c){S=DEF();save();
 $('#btnRun').onclick=()=>{AU.init();startRun();};
 $('#btnResTown').onclick=()=>{G=null;P=null;ADS.midgame(()=>{renderTown();showScreen('town');});};
 function runLogText(){const h=(S.hist||[]).slice(-12);const lines=h.map(r=>`${r.d} ${MAPS[r.map]?MAPS[r.map].name:r.map} 煉獄${r.tor} ${CLASSES[r.cls]?CLASSES[r.cls].name:r.cls} ${r.kind==='dead'?'死亡':r.kind==='tp'?'回城':'通關'} ${r.t} Lv${r.lv} 殺${r.kills} 黃${r.yellow} 橘${r.leg}${r.killer?' 死於'+r.killer:''}${r.revived?' 復活過':''}`);return `血裂隙 遊玩紀錄 ${window.BR_VERSION||'artifact'}\n裝置 ${innerWidth}x${innerHeight} ${/Mobi|Android/i.test(navigator.userAgent)?'手機':'電腦'} 像素風${S.retro?'開':'關'} 廣告${ADS.env}\n出征 ${S.runs} 通關 ${S.wins} 超凡 ${BAL.paragon(S.xpTotal)} 倉庫 ${S.stash.length} 金 ${S.gold}\n`+(lines.length?lines.join('\n'):'（還沒有完整的一局）');}
+/* ---------------- 匿名遊玩統計 ---------------- */
+const TELE={on:true,pid:'anon',base:(location.hostname.endsWith('pages.dev')?'':'https://bloodrift.pages.dev')+'/api'};
+try{TELE.pid=localStorage.getItem('bloodrift_pid')||'';if(!TELE.pid){TELE.pid=Array.from(crypto.getRandomValues(new Uint8Array(6)),b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('bloodrift_pid',TELE.pid);}}catch(e){}
+if(/^(localhost|127\.|\[::1\])/.test(location.hostname)&&!/[?&]tele=1/.test(location.search))TELE.on=false;
+if(location.hostname.includes('claude'))TELE.on=false;
+TELE.platform=()=>{const h=location.hostname;return h.endsWith('pages.dev')?'cf':h.endsWith('github.io')?'github':h.includes('claude')?'artifact':(window.BR_PLATFORM||'other');};
+TELE.device=()=>/Mobi|Android/i.test(navigator.userAgent)?'mobile':'desktop';
+TELE.send=function(path,obj){if(!TELE.on)return false;try{obj.pid=TELE.pid;obj.ver=window.BR_VERSION||'dev';obj.platform=TELE.platform();obj.device=TELE.device();fetch(TELE.base+'/'+path,{method:'POST',body:JSON.stringify(obj),keepalive:true,mode:'cors',headers:{'content-type':'text/plain'}}).catch(()=>{});return true;}catch(e){return false;}};
+function showFb(){$('#fbBox').hidden=false;$('#fbTxt').value='';$('#fbTxt').focus();}
+$('#btnFb').onclick=showFb;$('#btnFb2').onclick=showFb;$('#btnFb3').onclick=showFb;$('#btnFbClose').onclick=()=>{$('#fbBox').hidden=true;};
+$('#btnFbSend').onclick=()=>{const t=$('#fbTxt').value.trim();if(!t){toast('先寫一句話');return;}const ok=TELE.send('feedback',{text:t,cls:P?P.cls:S.cls,map:S.map,t:G?Math.round(G.t):0});$('#fbBox').hidden=true;toast(ok?'謝謝！已送給作者':(location.hostname.includes('claude')?'這個連結送不出去，請到 bloodrift.pages.dev 玩':'本機測試模式，沒有送出'));};
 function showLog(){const t=runLogText();const ta=$('#logTxt');ta.value=t;$('#logBox').hidden=false;$('#logMsg').textContent='';let ok=false;try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>{$('#logMsg').textContent='已複製到剪貼簿，直接貼給 Claude 就好。';},()=>{$('#logMsg').textContent='自動複製失敗，請全選上面的文字複製。';});ok=true;}}catch(e){}if(!ok)$('#logMsg').textContent='請全選上面的文字複製。';ta.focus();ta.select();}
 $('#btnLog').onclick=showLog;$('#btnLog2').onclick=showLog;$('#btnLogClose').onclick=()=>{$('#logBox').hidden=true;};
 $('#btnRevive').onclick=reviveAccept;$('#btnDie').onclick=reviveDecline;
@@ -1412,7 +1424,7 @@ window.addEventListener('unhandledrejection',e=>{showErr('promise: '+(e.reason&&
 let frameErr=0;
 function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;try{if(G&&!G.over)update(dt);else if(G&&G.over&&!G.paused){G.endT+=dt;for(let i=FX.length-1;i>=0;i--){FX[i].t+=dt;if(FX[i].t>=FX[i].life)FX.splice(i,1);}}render();}catch(e){if(frameErr++<3)showErr(String(e.stack||e).slice(0,300));}requestAnimationFrame(frame);}
 window.addEventListener('resize',resize);
-async function boot(){load();resize();renderTitle();$('#btnRetro2').textContent=retroTxt();showScreen('title');requestAnimationFrame(frame);await ADS.init();ADS.loadingStart();renderTitle();ADS.loadingStop();}
+async function boot(){load();TELE.send('ping',{w:innerWidth,h:innerHeight});resize();renderTitle();$('#btnRetro2').textContent=retroTxt();showScreen('title');requestAnimationFrame(frame);await ADS.init();ADS.loadingStart();renderTitle();ADS.loadingStop();}
 if(window.claude&&window.claude.hot&&window.claude.hot.ready)window.claude.hot.ready(boot);else boot();
 
 /* ---------------- debug / simulation ---------------- */
