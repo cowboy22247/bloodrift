@@ -129,6 +129,11 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
 #hBag b{color:var(--q2);font-weight:400}
 #toasts{position:absolute;left:50%;top:22%;transform:translateX(-50%);display:flex;flex-direction:column;gap:4px;align-items:center;width:max-content;max-width:90%}
 .toast{background:rgba(10,7,8,.8);border:1px solid var(--line);padding:4px 12px;border-radius:3px;font-size:13px;animation:tfade 2.4s forwards;text-align:center}
+#startHint{position:fixed;left:50%;top:60%;transform:translate(-50%,-50%);text-align:center;pointer-events:none;z-index:6;font-family:var(--font-display);font-size:clamp(20px,4.2vw,34px);line-height:1.45;color:#f3dfb4;text-shadow:0 0 10px #000,0 0 22px rgba(200,40,40,.7);animation:hintPulse 1.6s ease-in-out infinite;width:min(92vw,640px)}
+#startHint small{display:block;font-size:.55em;color:#cdbb9c;margin-top:6px;font-family:inherit}
+#startHint kbd{font-size:.8em}
+@keyframes hintPulse{0%,100%{opacity:.75}50%{opacity:1}}
+@media (prefers-reduced-motion:reduce){#startHint{animation:none}}
 .toast.long{animation-duration:7s;max-width:min(520px,90vw);white-space:normal;border-color:var(--gold);background:rgba(20,13,11,.92)}
 @keyframes tfade{0%{opacity:0;transform:translateY(6px)}10%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
 #chan{position:absolute;left:50%;top:60%;transform:translateX(-50%);width:220px;text-align:center;font-size:13px;color:#bcd0ff;text-shadow:0 1px 2px #000}
@@ -175,6 +180,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
 <div id="app">
   <canvas id="cv"></canvas>
   <canvas id="ov"></canvas>
+  <div id="startHint" hidden></div>
   <div id="vign"></div>
 
   <div id="hud" hidden>
@@ -247,7 +253,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
     <div class="row"><button id="btnRestore" hidden>看廣告保留全部戰利品</button><button class="big" id="btnResTown">回城</button><button id="btnLog">複製遊玩紀錄</button><button id="btnFb">意見回饋</button></div>
   </div>
 </div>
-<script>window.BR_PLATFORM="web";window.BR_VERSION="20261017-2215";</script>
+<script>window.BR_PLATFORM="web";window.BR_VERSION="20261022-1028";</script>
 <script>
 (()=>{
 'use strict';
@@ -691,6 +697,7 @@ function useActive(){
 /* ---------------- update ---------------- */
 function update(dt){
   if(!G||G.over||G.paused)return;
+  if(!G.started){const mv=IN.joy?Math.hypot(IN.jx,IN.jy):Math.hypot(IN.x,IN.y);if(mv>0.1){G.started=true;$('#startHint').hidden=true;}else{G.idle=(G.idle||0)+dt;return;}}
   G.t+=dt;const tm=G.t/60;
   for(const k in P.buffs)if(P.buffs[k]>0)P.buffs[k]-=dt;
   P.inv-=dt;P.hurt-=dt;P.slow-=dt;P.actCd-=dt;P.actAnim-=dt;P.phaseCd=(P.phaseCd||0)-dt;
@@ -710,7 +717,7 @@ function update(dt){
   if(P.tp>0){P.tp+=dt;$('#chanFill').style.width=Math.min(100,(P.tp-1)/BAL.tpChannel*100)+'%';if(P.tp-1>=BAL.tpChannel){endRun('tp');return;}}
   if(G.winPending){G.winPending-=dt;if(G.winPending<=0){G.winPending=0;for(const g of IT){if(g.it.q>=2){g.it.found=true;P.bag.push(g.it);}else P.gold+=(g.it.q+1)*10;}IT.length=0;for(const g of GOLD)if(!g.heal)P.gold+=g.v;GOLD.length=0;endRun('win');return;}}
   // ---- tips
-  if(G.t>3&&G.t<4)tip('move','移動：WASD、方向鍵或左半邊搖桿。技能會自動攻擊，你只要負責走位。');
+  if(G.t>3&&G.t<4)tip('move','技能會自動攻擊，你只要負責走位。撿藍色水晶升級，每次升級三選一。');
   if(G.t>40&&G.t<41)tip('shrine','地圖上有祭壇，走過去就啟動。血誓祭壇要撐 30 秒才有寶箱。');
   if(G.t>=BAL.tpUnlock&&!G.tpToast){G.tpToast=true;toast('回城符可以用了：按 T 或右下角按鈕，吟唱 5 秒帶走全部戰利品',false,true);}
   // ---- timeline
@@ -947,7 +954,7 @@ function reviveAccept(){
 }
 function reviveDecline(){if(!G||!G.pendingDeath)return;$('#death').hidden=true;G.pendingDeath=false;G.paused=false;endRun('dead');}
 function endRun(kind){
-  if(G.over)return;G.over=kind;ADS.gameplayStop();$('#chan').hidden=true;$('#bossbar').hidden=true;
+  if(G.over)return;$('#startHint').hidden=true;G.over=kind;ADS.gameplayStop();$('#chan').hidden=true;$('#bossbar').hidden=true;
   if(G.curPick){if(!G.pickFromBag)P.bag.push(G.curPick);G.curPick=null;G.pickFromBag=false;}
   for(const id of ['pk','bag','lvl','death','logBox'])$('#'+id).hidden=true;G.paused=false;G.curOffers=null;
   if(kind==='dead'){const s=G.lastDmgSrc;if(s&&s.boss)S.nemesis=s.boss;}
@@ -1378,7 +1385,8 @@ $('#btnFbSend').onclick=()=>{const t=$('#fbTxt').value.trim();if(!t){toast('先�
 function showLog(){const t=runLogText();const ta=$('#logTxt');ta.value=t;$('#logBox').hidden=false;$('#logMsg').textContent='';let ok=false;try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>{$('#logMsg').textContent='已複製到剪貼簿，直接貼給 Claude 就好。';},()=>{$('#logMsg').textContent='自動複製失敗，請全選上面的文字複製。';});ok=true;}}catch(e){}if(!ok)$('#logMsg').textContent='請全選上面的文字複製。';ta.focus();ta.select();}
 $('#btnLog').onclick=showLog;$('#btnLog2').onclick=showLog;$('#btnLogClose').onclick=()=>{$('#logBox').hidden=true;};
 $('#btnRevive').onclick=reviveAccept;$('#btnDie').onclick=reviveDecline;
-function startRun(){$('#lvl').hidden=true;$('#pk').hidden=true;$('#pause').hidden=true;$('#bag').hidden=true;$('#death').hidden=true;newRun();showScreen('');updateHud();ADS.gameplayStart();}
+function showStartHint(){const touch=('ontouchstart' in window)||navigator.maxTouchPoints>0;const h=$('#startHint');h.innerHTML=touch?'按住畫面左半邊，拖曳移動<small>技能會自動攻擊；開始移動，怪物才會出現</small>':'用 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 或方向鍵移動<small>技能會自動攻擊；開始移動，怪物才會出現</small>';h.hidden=false;}
+function startRun(){$('#lvl').hidden=true;$('#pk').hidden=true;$('#pause').hidden=true;$('#bag').hidden=true;$('#death').hidden=true;newRun();showScreen('');updateHud();ADS.gameplayStart();showStartHint();}
 
 /* ---------------- ads / platform（CrazyGames SDK v3；其他平台為 none；?ads=mock 本機模擬） ---------------- */
 const ADS={env:'none',ready:false,sdk:null,lastAd:0,showing:false,everPlayed:false,prevPaused:null,
@@ -1432,9 +1440,11 @@ if(window.claude&&window.claude.hot&&window.claude.hot.ready)window.claude.hot.r
 window.__br={get S(){return S},get G(){return G},get P(){return P},get E(){return E},get ST(){return ST},BAL,startRun,openLevelUp,openBag,openCompare,rollItem,reviveAccept,reviveDecline,ADS,drawCards,renderTitle,get TS_CARDS(){return TS_CARDS},get SPR(){return SPR},get ART(){return ART},
   killAll(){for(const e of E)if(!e.dead){e.hp=0;killEnemy(e,'dbg');}},
   snap(w=960,h=540){W=w;H=h;DPR=1;PX=S.retro?Math.max(1,Math.round(Math.sqrt(W*H)/700)):1;IS=1/PX;cv.width=Math.round(W*IS);cv.height=Math.round(H*IS);ov.width=W;ov.height=H;if(!lightCv){lightCv=document.createElement('canvas');lcx=lightCv.getContext('2d');}lightCv.width=cv.width;lightCv.height=cv.height;CAM.z=clamp(Math.min(W,H)/640,.62,1.15)*(S.zoom||1);if(P){CAM.x=P.x;CAM.y=P.y;}render();const t=document.createElement('canvas');t.width=W;t.height=H;const c=t.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(cv,0,0,W,H);c.drawImage(ov,0,0,W,H);return t.toDataURL('image/png');},
+  dropLeg(dx=60,dy=-30){dropItem(P.x+dx,P.y+dy,{minq:3});},
   giveLeg(){const it=rollItem(30,{q:3});it.found=true;IT.push({x:P.x+5,y:P.y+5,it,t:1});},
   sim(minutes=5,opts={}){const log=[];const dt=1/60;const steps=Math.round(minutes*60/dt);let errs=0;
     if(!G||G.over){if(opts.cls)S.cls=opts.cls;if(opts.torment)S.torment=opts.torment;startRun();}
+    if(!G.started){G.started=true;$('#startHint').hidden=true;}
     for(let i=0;i<steps;i++){
       if(!$('#lvl').hidden&&G.curOffers){chooseCard(G.curOffers[opts.pickIdx!==undefined?opts.pickIdx:Math.floor(Math.random()*3)]);}
       if(!$('#pk').hidden&&G.curPick){const it=G.curPick;pickDo(itemScore(it)>itemScore(P.eq[it.slot])?'eq':'bag');}
