@@ -176,6 +176,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
 #forge .res.boom{color:#ff5a4a;text-shadow:0 0 14px rgba(255,60,40,.9);animation:forgeBoom .5s ease-out}
 @keyframes forgeOk{from{transform:scale(1.6);opacity:.2}to{transform:scale(1);opacity:1}}
 @keyframes forgeBoom{0%{transform:translateX(-8px)}25%{transform:translateX(8px)}50%{transform:translateX(-6px)}75%{transform:translateX(6px)}100%{transform:none}}
+#btnPauseHud{position:absolute;left:10px;top:58px;padding:4px 10px;font-size:13px;line-height:1;opacity:.85;pointer-events:auto;z-index:3}
 .toast.long{animation-duration:7s;max-width:min(520px,90vw);white-space:normal;border-color:var(--gold);background:rgba(20,13,11,.92)}
 @keyframes tfade{0%{opacity:0;transform:translateY(6px)}10%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
 #chan{position:absolute;left:50%;top:60%;transform:translateX(-50%);width:220px;text-align:center;font-size:13px;color:#bcd0ff;text-shadow:0 1px 2px #000}
@@ -228,7 +229,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
   <div id="hud" hidden>
     <div class="top">
       <div class="xpbar"><i id="xpFill"></i></div>
-      <div id="combo" hidden></div><div class="toprow"><span class="l">Lv <b id="hLv">1</b> · 煉獄 <b id="hTor">1</b></span><span class="time" id="hTime">0:00</span><span class="r">擊殺 <b id="hKill">0</b></span></div>
+      <button id="btnPauseHud" aria-label="暫停">❚❚</button><div id="combo" hidden></div><div class="toprow"><span class="l">Lv <b id="hLv">1</b> · 煉獄 <b id="hTor">1</b></span><span class="time" id="hTime">0:00</span><span class="r">擊殺 <b id="hKill">0</b></span></div>
     </div>
     <div id="bossbar" hidden><div class="nm" id="bossName"></div><div class="bar"><i id="bossFill"></i></div></div>
     <div class="bottom">
@@ -283,7 +284,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
   <div id="forge" class="modal" hidden><div style="text-align:center;width:min(460px,100%)"><h2>鐵匠的鐵砧</h2><p class="tag">強化卷軸：成功時裝備所有詞綴 +8%。+7 以上失敗，裝備會<b style="color:#ff6a5a">蒸發</b>。</p><div id="forgeItem"></div><div class="anvil" id="forgeInfo"></div><div class="res" id="forgeRes"></div><div class="btns"><button class="big" id="btnForge">強化</button><button id="btnForgeClose">關閉</button></div></div></div>
   <div id="gate" class="modal" hidden><div style="text-align:center"><h2>深淵之門</h2><p class="tag" id="gateSub"></p><div class="opts" id="gateOpts"></div><p class="help" id="gateInfo"></p></div></div>
   <div id="pact" class="modal" hidden><div style="text-align:center"><h2>惡魔契約</h2><p class="tag">力量要付出代價。選一個，或拒絕。</p><div class="opts" id="pactOpts"></div><button class="refuse" id="btnPactNo">拒絕 <span class="key" style="font-size:10px">4</span></button></div></div>
-  <div id="chest" class="modal" hidden><div style="text-align:center;width:min(560px,100%)"><h2 id="chestTitle">寶箱！</h2><div class="reel" id="chestReel">？</div><div class="got" id="chestGot"></div><div class="btns"><button class="big" id="btnChest" hidden>繼續 <span class="key" style="font-size:10px">空白鍵</span></button></div></div></div>
+  <div id="chest" class="modal" hidden><div style="text-align:center;width:min(560px,100%)"><h2 id="chestTitle">寶箱！</h2><div class="reel" id="chestReel">？</div><div class="got" id="chestGot"></div><div class="btns"><button class="big" id="btnChest" hidden>繼續 <span class="key" style="font-size:10px">點一下／空白鍵</span></button></div></div></div>
   <div id="bag" class="modal" hidden><div style="width:min(560px,100%)"><h2>戰利品包</h2><div class="stash" id="bagList" style="max-height:60vh"></div><div class="btns"><button id="btnBagClose">關閉 (B)</button></div></div></div>
   <div id="pk" class="modal" hidden><div><h2 id="pkTitle">撿到裝備</h2><div class="cmp" id="pkCmp"></div><div class="btns" id="pkBtns"></div></div></div>
   <div id="death" class="modal" hidden><div style="text-align:center"><h2>你倒下了</h2><p class="tag" id="deathSub">看一段廣告就能原地復活（每局一次），不看就接受死亡。</p><div class="btns"><button class="big" id="btnRevive">看廣告原地復活 <span class="key" style="font-size:10px">1</span></button><button id="btnDie">接受死亡 <span class="key" style="font-size:10px">2</span></button></div></div></div>
@@ -299,7 +300,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
     <div class="row"><button id="btnRestore" hidden>看廣告保留全部戰利品</button><button class="big" id="btnResTown">回城</button><button id="btnLog">複製遊玩紀錄</button><button id="btnFb">意見回饋</button></div>
   </div>
 </div>
-<script>window.BR_PLATFORM="web";window.BR_VERSION="20261023-1233";</script>
+<script>window.BR_PLATFORM="web";window.BR_VERSION="20261025-0009";</script>
 <script>
 (()=>{
 'use strict';
@@ -1622,7 +1623,7 @@ $('#btnTp').addEventListener('click',()=>{startTp()});
 $('#hBag').addEventListener('click',()=>{if(!$('#bag').hidden)closeBag();else openBag();});
 $('#btnBagClose').addEventListener('click',closeBag);
 function togglePause(){if(!G||G.over||G.pendingDeath||ADS.showing)return;if(!$('#pause').hidden){$('#pause').hidden=true;G.paused=false;ADS.gameplayStart();}else{G.paused=true;$('#pause').hidden=false;ADS.gameplayStop();$('#btnMute2').textContent=S.mute?'音效：關':'音效：開';$('#btnRetro').textContent=retroTxt();$('#btnZoom').textContent=zoomTxt();}}
-$('#btnResume').onclick=togglePause;
+$('#btnResume').onclick=togglePause;$('#btnPauseHud').onclick=()=>{if(G&&!G.over&&$('#lvl').hidden&&$('#pk').hidden&&$('#chest').hidden&&$('#gate').hidden&&$('#pact').hidden)togglePause();};
 $('#btnMute2').onclick=()=>{S.mute=!S.mute;save();$('#btnMute2').textContent=S.mute?'音效：關':'音效：開';};
 const retroTxt=()=>'像素風：'+(S.retro?'開':'關');
 const ZOOMS=[[0.8,'小'],[1,'中'],[1.25,'大']];const zoomTxt=()=>'畫面縮放：'+(ZOOMS.find(z=>z[0]===(S.zoom||1))||ZOOMS[1])[1];
@@ -1639,7 +1640,9 @@ $('#btnRun').onclick=()=>{AU.init();startRun();};
 $('#btnResTown').onclick=()=>{G=null;P=null;ADS.midgame(()=>{renderTown();showScreen('town');});};
 function runLogText(){const h=(S.hist||[]).slice(-12);const lines=h.map(r=>`${r.d} ${MAPS[r.map]?MAPS[r.map].name:r.map} 煉獄${r.tor} ${CLASSES[r.cls]?CLASSES[r.cls].name:r.cls} ${r.kind==='dead'?'死亡':r.kind==='tp'?'回城':'通關'} ${r.t} Lv${r.lv} 殺${r.kills} 黃${r.yellow} 橘${r.leg}${r.killer?' 死於'+r.killer:''}${r.revived?' 復活過':''}`);return `血裂隙 遊玩紀錄 ${window.BR_VERSION||'artifact'}\n裝置 ${innerWidth}x${innerHeight} ${/Mobi|Android/i.test(navigator.userAgent)?'手機':'電腦'} 像素風${S.retro?'開':'關'} 廣告${ADS.env}\n出征 ${S.runs} 通關 ${S.wins} 超凡 ${BAL.paragon(S.xpTotal)} 倉庫 ${S.stash.length} 金 ${S.gold}\n`+(lines.length?lines.join('\n'):'（還沒有完整的一局）');}
 /* ---------------- 匿名遊玩統計 ---------------- */
-window.addEventListener('pagehide',()=>{try{if(G&&P&&!G.over&&G.started&&!G.quitSent){G.quitSent=1;TELE.send('run',{map:S.map,tor:S.torment,cls:P.cls,kind:'quit',t:Math.round(G.t),lv:P.lv,kills:P.kills,yellow:P.bag.filter(i=>i.q>=2).length,leg:P.bag.filter(i=>i.q===3).length,killer:'',revived:!!P.revived,runs:(S.runs||0)+1,depth:G.deep||0,pacts:(P.pacts||[]).join(','),combo:G.bestCombo||0,chests:G.chests||0});}}catch(e){}});
+const sendQuit=(kind)=>{try{if(G&&P&&!G.over&&G.started&&!G.quitSent&&G.t>20){G.quitSent=1;const stk=['chest','gate','pact','lvl','pk','bag','pause','death'].filter(id=>{const el=document.getElementById(id);return el&&!el.hidden;}).join(',');TELE.send('run',{map:S.map,tor:S.torment,cls:P.cls,kind,t:Math.round(G.t),lv:P.lv,kills:P.kills,yellow:P.bag.filter(i=>i.q>=2).length,leg:P.bag.filter(i=>i.q===3).length,killer:stk?'畫面:'+stk:'',revived:!!P.revived,runs:(S.runs||0)+1,depth:G.deep||0,pacts:(P.pacts||[]).join(','),combo:G.bestCombo||0,chests:G.chests||0});}}catch(e){}};
+window.addEventListener('pagehide',()=>sendQuit('quit'));
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')sendQuit('hide');});
 const TELE={on:true,pid:'anon',base:(location.hostname.endsWith('pages.dev')?'':'https://bloodrift.pages.dev')+'/api'};
 try{TELE.pid=localStorage.getItem('bloodrift_pid')||'';if(!TELE.pid){TELE.pid=Array.from(crypto.getRandomValues(new Uint8Array(6)),b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('bloodrift_pid',TELE.pid);}}catch(e){}
 if(/^(localhost|127\.|\[::1\])/.test(location.hostname)&&!/[?&]tele=1/.test(location.search))TELE.on=false;
@@ -1651,7 +1654,7 @@ function showFb(){$('#fbBox').hidden=false;$('#fbTxt').value='';$('#fbTxt').focu
 $('#btnFb').onclick=showFb;$('#btnFb2').onclick=showFb;$('#btnFb3').onclick=showFb;$('#btnFbClose').onclick=()=>{$('#fbBox').hidden=true;};
 $('#btnFbSend').onclick=()=>{const t=$('#fbTxt').value.trim();if(!t){toast('先寫一句話');return;}const ok=TELE.send('feedback',{text:t,cls:P?P.cls:S.cls,map:S.map,t:G?Math.round(G.t):0});$('#fbBox').hidden=true;toast(ok?'謝謝！已送給作者':(location.hostname.includes('claude')?'這個連結送不出去，請到 bloodrift.pages.dev 玩':'本機測試模式，沒有送出'));};
 function showLog(){const t=runLogText();const ta=$('#logTxt');ta.value=t;$('#logBox').hidden=false;$('#logMsg').textContent='';let ok=false;try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(()=>{$('#logMsg').textContent='已複製到剪貼簿，直接貼給 Claude 就好。';},()=>{$('#logMsg').textContent='自動複製失敗，請全選上面的文字複製。';});ok=true;}}catch(e){}if(!ok)$('#logMsg').textContent='請全選上面的文字複製。';ta.focus();ta.select();}
-$('#btnLog').onclick=showLog;$('#btnForge').onclick=doForge;$('#btnForgeClose').onclick=()=>{$('#forge').hidden=true;FORGE=null;};$('#btnPactNo').onclick=()=>pactChoose(null);$('#btnLog2').onclick=showLog;$('#btnLogClose').onclick=()=>{$('#logBox').hidden=true;};
+$('#btnLog').onclick=showLog;$('#btnChest').onclick=e=>{e.stopPropagation();closeChest();};$('#chest').onclick=()=>closeChest();$('#btnForge').onclick=doForge;$('#btnForgeClose').onclick=()=>{$('#forge').hidden=true;FORGE=null;};$('#btnPactNo').onclick=()=>pactChoose(null);$('#btnLog2').onclick=showLog;$('#btnLogClose').onclick=()=>{$('#logBox').hidden=true;};
 $('#btnRevive').onclick=reviveAccept;$('#btnDie').onclick=reviveDecline;
 function showStartHint(){const touch=('ontouchstart' in window)||navigator.maxTouchPoints>0;const h=$('#startHint');h.innerHTML=touch?'按住畫面左半邊，拖曳移動<small>技能會自動攻擊；開始移動，怪物才會出現</small>':'用 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 或方向鍵移動<small>技能會自動攻擊；開始移動，怪物才會出現</small>';h.hidden=false;}
 function startRun(){$('#lvl').hidden=true;$('#chest').hidden=true;$('#gate').hidden=true;$('#pact').hidden=true;$('#pk').hidden=true;$('#pause').hidden=true;$('#bag').hidden=true;$('#death').hidden=true;newRun();showScreen('');updateHud();ADS.gameplayStart();showStartHint();}
