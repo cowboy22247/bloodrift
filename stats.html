@@ -8,11 +8,16 @@ const fmt=t=>t==null?'-':Math.floor(t/60)+':'+String(t%60).padStart(2,'0');const
 const esc=x=>String(x==null?'':x).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
 const KIND={dead:'死亡',tp:'回城',win:'通關'},CLS={barb:'野蠻人',sorc:'女巫',necro:'死靈法師'},MAP={grave:'墓園',crypt:'地窖'};
 const tbl=(rows,cols)=>rows&&rows.length?'<div class="wrap"><table><tr>'+cols.map(c=>'<th>'+c[0]+'</th>').join('')+'</tr>'+rows.map(r=>'<tr>'+cols.map(c=>'<td>'+esc(c[1](r))+'</td>').join('')+'</tr>').join('')+'</table></div>':'<div class="dim">還沒有資料</div>';
+const STEPS=[['first_visit','第一次打開'],['title','看到標題'],['quick','按立即開始'],['town','進城鎮'],['run_start','開始一局'],['moved','開始移動'],['lvl1','第一次升級'],['t60','撐過 1 分鐘'],['t180','撐過 3 分鐘'],['boss1','打倒第一隻首領'],['t300','撐過 5 分鐘'],['result','打完一局'],['run_again','再開一局'],['t600','撐過 10 分鐘'],['gate','看到深淵之門'],['deep','選擇深入'],['chest1','開過寶箱'],['pact1','碰過契約'],['urn1','撞過罐子'],['forge','打開鐵匠'],['talent','點過天賦'],['death1','死過'],['tp_try','用過回城']];
+function funnel(d){const m=Object.fromEntries((d.funnel||[]).map(x=>[x.ev,x.players]));const base=m.first_visit||m.title||1;const mx=Math.max(1,...Object.values(m));
+  const rows=STEPS.filter(([k])=>m[k]).map(([k,n])=>`<div><span class="dim" style="display:inline-block;width:112px">${n}</span><span class="bar" style="width:${Math.round(m[k]/mx*180)}px;background:#d9a64a"></span>${m[k]} 人 <span class="dim">(${Math.round(m[k]/base*100)}%)</span></div>`).join('');
+  return rows||'<div class="dim">還沒有資料（新版上線後開始記錄）</div>';}
 fetch(API).then(r=>r.json()).then(d=>{
   $('#gen').textContent='更新於 '+new Date(d.generated).toLocaleString('zh-TW',{hour12:false});const T=d.totals||{},F=d.firstRun||{},R=d.retention||{};
   const mx=Math.max(1,...(d.firstRunDeaths||[]).map(x=>x.n));
   $('#out').innerHTML=`
   <div class="k"><div>打開過遊戲<b>${T.players||0}</b></div><div>打完至少一局<b>${T.players_with_run||0}</b></div><div>總局數<b>${T.runs||0}</b></div><div>玩 2 局以上<b>${R.two_plus||0}</b></div><div>玩 5 局以上<b>${R.five_plus||0}</b></div><div>回饋<b>${T.feedback||0}</b></div></div>
+  <h2>新手漏斗（每一步走到的人數）</h2>${funnel(d)}
   <h2>第一局（新手體驗）</h2><div class="k"><div>局數<b>${F.n||0}</b></div><div>平均存活<b>${fmt(F.avg_t)}</b></div><div>死亡<b>${F.deaths||0}</b></div><div>回城<b>${F.tps||0}</b></div><div>通關<b>${F.wins||0}</b></div></div>
   <div style="margin-top:8px">${(d.firstRunDeaths||[]).map(x=>`<div><span class="dim" style="display:inline-block;width:64px">${x.minute}–${x.minute+1} 分</span><span class="bar" style="width:${Math.round(x.n/mx*200)}px"></span>${x.n}</div>`).join('')||'<div class="dim">還沒有第一局死亡資料</div>'}</div>
   <h2>死因</h2>${tbl(d.killers,[['死因',r=>r.killer||'？'],['次數',r=>r.n],['平均時間',r=>fmt(r.avg_t)]])}

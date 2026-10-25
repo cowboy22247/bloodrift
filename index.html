@@ -179,7 +179,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
 #btnPauseHud{position:absolute;left:10px;top:58px;padding:4px 10px;font-size:13px;line-height:1;opacity:.85;pointer-events:auto;z-index:3}
 @media (max-width:700px){
   #title,#town,#result{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
-  #btnTown,#btnRun,#btnResTown{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:6;width:min(92vw,420px);box-shadow:0 6px 28px rgba(0,0,0,.85),0 0 0 1px rgba(217,166,74,.4)}
+  .cta{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:6;width:min(92vw,420px);box-shadow:0 6px 28px rgba(0,0,0,.85),0 0 0 1px rgba(217,166,74,.4)}
   #town .npc{order:-1}
 }
 .toast.long{animation-duration:7s;max-width:min(520px,90vw);white-space:normal;border-color:var(--gold);background:rgba(20,13,11,.92)}
@@ -257,7 +257,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
     <div class="rule"></div>
     <p class="tag">十分鐘一局的裂隙。撿到的裝備，要活著回城才算你的。</p>
     <div class="cls-row" id="clsRow"></div>
-    <div class="row"><button class="big" id="btnTown">進入城鎮</button><button id="btnRetro2"></button><button id="btnWipe">清除存檔</button></div>
+    <div class="row"><button class="big" id="btnQuick" hidden>立即開始</button><button class="big" id="btnTown">進入城鎮</button><button id="btnRetro2"></button><button id="btnWipe">清除存檔</button></div>
     <p class="help" style="max-width:70ch;text-align:center">移動 <kbd>WASD</kbd>／方向鍵（手機：左半邊搖桿）・主動技 <kbd>空白鍵</kbd>・回城 <kbd>T</kbd>・戰利品包 <kbd>B</kbd>・暫停 <kbd>Esc</kbd>・選卡 <kbd>1</kbd>–<kbd>4</kbd></p>
     <p class="credits">角色模型 KayKit（CC0）・部分場景素材由本機 AI 生成・匿名遊玩統計會回傳給作者調整難度・試玩版 0.1</p>
   </div>
@@ -274,13 +274,13 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
         <div class="row"><label for="selTor">煉獄等級</label><select id="selTor"></select></div>
         <p id="torDesc"></p>
         <p id="nemDesc" style="color:#ffb0a0"></p>
-        <button class="big" id="btnRun">進入裂隙</button>
+        <button class="big cta" id="btnRun">進入裂隙</button>
         <h2 class="sec" style="margin-top:6px">賭徒 莫德</h2>
         <p>500 金幣，隨機一件至少魔法品質的裝備。選部位：</p>
         <div class="row" id="gambleRow"></div>
         <h2 class="sec" style="margin-top:6px">說明</h2>
         <p class="help">每局 10 分鐘。3:00 剁骨者、6:30 蛛后、10:00 深淵看守者。<br>精英怪身上有詞綴（疾速、燃跡、霜環…），黃色領隊必掉裝備，有機會掉<b style="color:#ffd84a">寶箱</b>（1～5 個免費升級，一局開越多越難掉）。<br>連殺達到 150、340、640……觸發<b style="color:#ff9a6a">殺戮狂熱</b>：吸光水晶、6 秒攻速移速提升，連殺中斷就重新算。升級時可以按 R 重抽（每局 2 次）。<br>白／藍裝自動分解成金幣；黃／橘裝會跳比較卡。<br><b style="color:#ffd84a">問號罐子</b>：撞破會掉金幣、烤肉、磁鐵、炸彈，稀有的無敵之星和變身卷軸。<br><b style="color:#ffd27a">鐵匠強化</b>：倉庫裡按「強化」，+1～+10，+7 以上失敗會蒸發。<br><b style="color:#ff9a8a">惡魔契約</b>：4:30、7:30 出現血紅祭壇，三選一的強力契約，每個都有代價。<br><b style="color:#d9a0ff">深淵之門</b>：打倒深淵看守者後，可以選擇回城，或深入裂隙賭更好的寶物。<br><b style="color:#bcd0ff">回城符</b>：5:00 之後可用，吟唱 5 秒不能動，成功就把全部戰利品帶回城。<br><b style="color:#ffb0a0">死亡</b>：本局撿到的裝備隨機掉一半。殺死你的首領下一局會變成「復仇者」。<br>打倒 10:00 的守護者解鎖下一個煉獄等級。</p>
-        <div class="row"><button id="btnBack">回標題</button><button id="btnMute"></button><button id="btnZoom2"></button><button id="btnLog2">複製遊玩紀錄</button><button id="btnFb3">意見回饋</button></div>
+        <div class="row"><button id="btnBack">回標題</button><button id="btnMute"></button><button id="btnMusic2"></button><button id="btnZoom2"></button><button id="btnLog2">複製遊玩紀錄</button><button id="btnFb3">意見回饋</button></div>
       </section>
     </div>
   </div>
@@ -296,16 +296,16 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
   <div id="adMock" class="modal" hidden><div style="text-align:center"><h2>廣告</h2><p class="tag" id="adMockT"></p><p class="help">本機測試用的模擬廣告，上架後由平台播真廣告</p></div></div>
   <div id="fbBox" class="modal" hidden><div style="width:min(480px,100%)"><h2>意見回饋</h2><p class="help">哪裡太難、太無聊、看不懂、有 bug，一句話就好。匿名送給作者。</p><textarea id="fbTxt" maxlength="300" placeholder="例如：剁骨者太痛、手機搖桿太小…" style="width:100%;height:110px;box-sizing:border-box;background:#100c0a;color:var(--ink);border:1px solid var(--line2);font-size:14px;padding:8px"></textarea><div class="btns"><button class="big" id="btnFbSend">送出</button><button id="btnFbClose">關閉</button></div></div></div>
   <div id="logBox" class="modal" hidden><div style="width:min(560px,100%)"><h2>遊玩紀錄</h2><textarea id="logTxt" style="width:100%;height:220px;box-sizing:border-box;background:#100c0a;color:var(--ink);border:1px solid var(--line2);font-family:monospace;font-size:12px;padding:8px"></textarea><p class="help" id="logMsg"></p><div class="btns"><button id="btnLogClose">關閉</button></div></div></div>
-  <div id="pause" class="modal" hidden><div style="text-align:center"><h2>暫停</h2><div class="btns"><button id="btnResume">繼續 (Esc)</button><button id="btnMute2"></button><button id="btnRetro"></button><button id="btnZoom"></button><button id="btnFb2">意見回饋</button><button id="btnGiveup">放棄本局（視同死亡）</button></div></div></div>
+  <div id="pause" class="modal" hidden><div style="text-align:center"><h2>暫停</h2><div class="btns"><button id="btnResume">繼續 (Esc)</button><button id="btnMute2"></button><button id="btnMusic"></button><button id="btnRetro"></button><button id="btnZoom"></button><button id="btnFb2">意見回饋</button><button id="btnGiveup">放棄本局（視同死亡）</button></div></div></div>
   <div id="result" class="screen" hidden>
     <h1 class="logo" id="resTitle" style="font-size:clamp(36px,8vw,64px)">你死了</h1>
     <p class="tag" id="resSub"></p>
     <div class="res" id="resGrid"></div>
     <div class="loot panel" id="resLoot"></div>
-    <div class="row"><button id="btnRestore" hidden>看廣告保留全部戰利品</button><button class="big" id="btnResTown">回城</button><button id="btnLog">複製遊玩紀錄</button><button id="btnFb">意見回饋</button></div>
+    <div class="row"><button id="btnRestore" hidden>看廣告保留全部戰利品</button><button class="big cta" id="btnResTown">回城</button><button id="btnLog">複製遊玩紀錄</button><button id="btnFb">意見回饋</button></div>
   </div>
 </div>
-<script>window.BR_PLATFORM="web";window.BR_VERSION="20261025-1103";</script>
+<script>window.BR_PLATFORM="web";window.BR_VERSION="20261025-1205";</script>
 <script>
 (()=>{
 'use strict';
@@ -489,7 +489,7 @@ const stashItem=id=>S.stash.find(i=>i.id===id);
 
 /* ---------------- audio (synth) ---------------- */
 const AU={ctx:null,last:0,
-  init(){if(this.ctx)return;try{this.ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}},
+  init(){if(this.ctx){if(this.ctx.state==='suspended')this.ctx.resume();return;}try{this.ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){}setTimeout(()=>MUSIC.play(MUSIC.want||'town'),0);},
   tone(f,t=.1,type='square',g=.06,slide=0,delay=0){if(!this.ctx||S.mute||this.adMute)return;const c=this.ctx,o=c.createOscillator(),v=c.createGain();const t0=c.currentTime+delay;o.type=type;o.frequency.setValueAtTime(f,t0);if(slide)o.frequency.exponentialRampToValueAtTime(Math.max(20,f+slide),t0+t);v.gain.setValueAtTime(g,t0);v.gain.exponentialRampToValueAtTime(.0001,t0+t);o.connect(v).connect(c.destination);o.start(t0);o.stop(t0+t);},
   noise(t=.15,g=.08,delay=0){if(!this.ctx||S.mute||this.adMute)return;const c=this.ctx,n=c.sampleRate*t|0,b=c.createBuffer(1,n,c.sampleRate),d=b.getChannelData(0);for(let i=0;i<n;i++)d[i]=(Math.random()*2-1)*(1-i/n);const s=c.createBufferSource();s.buffer=b;const v=c.createGain();v.gain.value=g;const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=900;s.connect(f).connect(v).connect(c.destination);s.start(c.currentTime+delay);},
   hit(){const n=performance.now();if(n-this.last<70)return;this.last=n;this.tone(160,.05,'square',.025,-90)},
@@ -506,6 +506,18 @@ const AU={ctx:null,last:0,
   gob(){[800,1000,800,1000].forEach((f,i)=>this.tone(f,.06,'square',.04,0,i*.07))},
 };
 
+/* ---------------- 背景音樂（music/*.mp3，Web Audio 無縫循環） ---------------- */
+const MUSIC={cur:null,want:'town',buf:{},loading:{},src:null,og:null,vol:.34,
+  on(){return !S.mute&&S.music!==false;},
+  async load(k){if(this.buf[k]!==undefined||this.loading[k]||!AU.ctx)return;this.loading[k]=1;try{const r=await fetch('music/'+k+'.mp3');if(!r.ok)throw new Error(r.status);const ab=await r.arrayBuffer();this.buf[k]=await new Promise((res,rej)=>AU.ctx.decodeAudioData(ab,res,rej));}catch(e){this.buf[k]=null;}this.loading[k]=0;if(this.want===k)this.play(k,true);},
+  play(k,force){this.want=k;if(!AU.ctx)return;if(!this.on()){this.stop();return;}if(this.cur===k&&this.src&&!force)return;const b=this.buf[k];if(b===undefined){this.load(k);return;}if(!b)return;
+    const c=AU.ctx,t=c.currentTime;this.fadeOut(1.2);const g=c.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(this.vol,t+1.6);const s=c.createBufferSource();s.buffer=b;s.loop=true;s.connect(g).connect(c.destination);s.start(t);this.src=s;this.og=g;this.cur=k;},
+  fadeOut(d){if(!this.src||!AU.ctx)return;const t=AU.ctx.currentTime,g=this.og,s=this.src;try{g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(0,t+d);s.stop(t+d+.05);}catch(e){}this.src=null;this.cur=null;},
+  stop(){this.fadeOut(.4);},
+  refresh(){if(!this.on())this.stop();else this.play(this.want,true);},
+};
+document.addEventListener('pointerdown',()=>AU.init(),{passive:true});
+document.addEventListener('visibilitychange',()=>{if(!AU.ctx)return;if(document.visibilityState==='hidden')AU.ctx.suspend();else AU.ctx.resume();});
 /* ---------------- items ---------------- */
 let uid=0; const nid=()=>(Date.now().toString(36)+(uid++).toString(36));
 function rollItem(ilvl,opt={}){
@@ -728,6 +740,7 @@ function chestPick(){
   const of=offers().filter(o=>o.k!=='heal');return of.length?of[0]:{k:'heal'};
 }
 function openChest(c){
+  TELE.ev('chest1');
   G.paused=true;G.chests++;AU.leg();CAM.shake=Math.max(CAM.shake,RM?0:5);
   const got=[];for(let i=0;i<c.n;i++){const o=chestPick();applyUp(o);got.push(upLabel(o));}
   buildHudSkills();
@@ -750,6 +763,7 @@ function grantWin(){
   save();
 }
 function openGate(){
+  TELE.ev('gate');
   G.paused=true;const loot=P.bag.length,leg=P.bag.filter(i=>i.q===3).length+Object.values(P.eq).filter(i=>i&&i.found&&i.q===3).length;
   $('#gateSub').textContent=`守護者倒下了。你身上有 ${loot} 件戰利品${leg?`（其中 ${leg} 件傳奇）`:''}。帶著它們回城，還是繼續深入？`;
   const o=$('#gateOpts');o.innerHTML='';
@@ -762,7 +776,7 @@ function openGate(){
 function gateChoose(w){
   if(!G||$('#gate').hidden)return;$('#gate').hidden=true;G.paused=false;
   if(w==='home'){G.winPending=.05;return;}
-  G.deep=1;G.deepT=45;goDeeper(true);
+  TELE.ev('deep');G.deep=1;G.deepT=45;goDeeper(true);
 }
 function goDeeper(first){
   if(!first){G.deep++;}
@@ -782,6 +796,7 @@ function spawnPactAltar(){
   toast('惡魔契約祭壇出現了（45 秒內走過去）',false,true);AU.rare();
 }
 function openPact(){
+  TELE.ev('pact1');
   G.paused=true;const taken=new Set(P.pacts);const pool=Object.keys(PACTS).filter(k=>!taken.has(k));
   const opts=[];while(opts.length<3&&pool.length)opts.push(pool.splice(ri(0,pool.length-1),1)[0]);G.pactOpts=opts;
   const o=$('#pactOpts');o.innerHTML='';
@@ -800,6 +815,7 @@ function pactChoose(k){
 }
 const MORPHS=[['butcher','剁骨者'],['guardian','深淵看守者'],['spiderq','蛛后'],['demon','惡魔']];
 function breakUrn(u){
+  TELE.ev('urn1');
   FX.push({k:'boom',x:u.x,y:u.y,r:34,col:'#c8893a',t:0,life:.3,own:true});spawnBlood(u.x,u.y,0,0);AU.gold();
   for(let i=0;i<8;i++)PART.push({x:u.x,y:u.y-8,vx:rnd(-160,160),vy:rnd(-200,-40),t:0,life:rnd(.3,.6),sz:rnd(2,4),col:pick(['#7a4a22','#a8743a','#5a3a1a'])});
   const r=Math.random();let ic='$',col='#ffd84a',msg='';
@@ -814,6 +830,7 @@ function breakUrn(u){
   tip('urn','頂著「?」的罐子撞破會掉好東西：金幣、烤肉、磁鐵、炸彈，運氣好還有無敵之星和變身卷軸。');
 }
 function bossDied(e){
+  TELE.ev('boss1');
   const nb=E.find(x=>x.boss&&!x.dead&&x!==e);G.boss=nb||null;if(nb){$('#bossName').textContent=nb.name;}else $('#bossbar').hidden=true;CAM.shake=RM?0:18;G.slowmo=.75;
   CHESTS.push({x:e.x,y:e.y-10,n:Math.random()<.2?5:3,boss:true,t:0});
   const n=BAL.bossDrops+(e.nem?1:0);for(let i=0;i<n;i++)dropItem(e.x+rnd(-40,40),e.y+rnd(-40,40),{minq:i===0?2:1,mf:.5});
@@ -901,8 +918,9 @@ function update(dt){
   if(!G||G.over||G.paused)return;
   if(G.slowmo>0){G.slowmo-=dt;dt*=.3;}
   if(G.comboT>0){G.comboT-=dt;if(G.comboT<=0){G.combo=0;G.nextFrenzy=150;}}
-  if(!G.started){const mv=IN.joy?Math.hypot(IN.jx,IN.jy):Math.hypot(IN.x,IN.y);if(mv>0.1){G.started=true;$('#startHint').hidden=true;}else{G.idle=(G.idle||0)+dt;return;}}
+  if(!G.started){const mv=IN.joy?Math.hypot(IN.jx,IN.jy):Math.hypot(IN.x,IN.y);if(mv>0.1){G.started=true;$('#startHint').hidden=true;TELE.ev('moved');}else{G.idle=(G.idle||0)+dt;return;}}
   G.t+=dt;const tm=G.t/60;
+  if(G.t>60){TELE.ev('t60');if(G.t>180){TELE.ev('t180');if(G.t>300){TELE.ev('t300');if(G.t>600)TELE.ev('t600');}}}
   for(const k in P.buffs)if(P.buffs[k]>0)P.buffs[k]-=dt;
   P.inv-=dt;P.hurt-=dt;P.slow-=dt;P.actCd-=dt;P.actAnim-=dt;P.phaseCd=(P.phaseCd||0)-dt;
   if(P.kb&&P.kb.t>0){P.x+=P.kb.vx*dt;P.y+=P.kb.vy*dt;P.kb.t-=dt;}
@@ -1099,7 +1117,7 @@ function evoFor(pid){return Object.keys(P.skills).filter(id=>!P.evo[id]&&SKILLS[
 function renderRoll(){const r=$('#lvlRoll');r.innerHTML='';if(!G)return;const b=document.createElement('button');b.textContent=`重抽（剩 ${G.rerolls}）R`;b.disabled=G.rerolls<=0;b.onclick=rerollCards;r.appendChild(b);}
 function rerollCards(){if(!G||G.rerolls<=0||$('#lvl').hidden)return;G.rerolls--;AU.act();renderOffers(offers());}
 function openLevelUp(){
-  P.lvQueue--;G.paused=true;AU.lvl();
+  TELE.ev('lvl1',P.lv);P.lvQueue--;G.paused=true;AU.lvl();
   renderOffers(offers());
 }
 function renderOffers(of){
@@ -1167,9 +1185,10 @@ function startTp(){
   if(G.t<BAL.tpUnlock){toast(`回城符 ${fmtT(BAL.tpUnlock)} 後才能使用`);return;}
   if(G.boss&&!G.deep){toast('首領戰中無法回城');return;}
   G.tpCh=BAL.tpChannel+(G.deep&&G.boss?2:0);
-  P.tp=1;$('#chan').hidden=false;$('#chanFill').style.width='0%';AU.tp();toast(G.tpCh>BAL.tpChannel?'深淵首領在場：吟唱 7 秒，別動！':'吟唱中……別動！怪會加速衝過來');
+  TELE.ev('tp_try');P.tp=1;$('#chan').hidden=false;$('#chanFill').style.width='0%';AU.tp();toast(G.tpCh>BAL.tpChannel?'深淵首領在場：吟唱 7 秒，別動！':'吟唱中……別動！怪會加速衝過來');
 }
 function onDeath(){
+  TELE.ev('death1');
   if(TL('second')&&!P.secondUsed){P.secondUsed=true;P.hp=ST.hpMax*.5;P.inv=2.5;FX.push({k:'pillar',x:P.x,y:P.y,t:0,life:2});AU.leg();toast('第二條命！以一半生命復活');near(P.x,P.y,220,e=>{if(e.boss)return;const a=Math.atan2(e.y-P.y,e.x-P.x);e.x+=Math.cos(a)*150;e.y+=Math.sin(a)*150;});return;}
   if(ADS.canShow()&&!P.revived){G.paused=true;G.pendingDeath=true;$('#death').hidden=false;return;}
   endRun('dead');
@@ -1202,6 +1221,7 @@ function endRun(kind){
   setTimeout(showResult,kind==='dead'?1300:600);
 }
 function showResult(){
+  TELE.ev('result');
   if(!G||!G.result)return;const R=G.result;const t=$('#resTitle');
   t.textContent={dead:'你死了',tp:'回城成功',win:'裂隙通關'}[R.kind];
   t.style.textShadow=R.kind==='dead'?'0 0 24px rgba(200,40,40,.8)':'0 0 24px rgba(217,166,74,.7)';
@@ -1537,7 +1557,7 @@ function townStats(cls){const save_=P;P={cls,passives:{},eq:eqOf(cls)};const s=c
 const EN_RATE=[1,1,1,.9,.8,.65,.5,.35,.25,.15];
 function enCost(n){return 80*n*n;}
 let FORGE=null;
-function openForge(it){FORGE=it;$('#forgeRes').textContent='';$('#forgeRes').className='res';renderForge();$('#forge').hidden=false;}
+function openForge(it){TELE.ev('forge');FORGE=it;$('#forgeRes').textContent='';$('#forgeRes').className='res';renderForge();$('#forge').hidden=false;}
 function renderForge(){
   const it=FORGE;if(!it)return;const en=it.en||0;$('#forgeItem').innerHTML=itemHTML(it);
   if(en>=10){$('#forgeInfo').innerHTML='已經 +10，強化到頂了。';$('#btnForge').disabled=true;return;}
@@ -1584,20 +1604,21 @@ function renderTown(){
   const gr=$('#gambleRow');gr.innerHTML='';for(const [sl,nm] of SLOTS){const b=document.createElement('button');b.textContent=nm;b.disabled=S.gold<500;b.onclick=()=>{if(S.gold<500)return;S.gold-=500;const it=rollItem(8+S.tormentMax*8,{slot:sl,minq:1,mf:.3});S.stash.push(it);trimStash();save();renderTown();AU[it.q===3?'leg':'rare']();toast(`莫德給了你 <span class="q${it.q}">${esc(itemName(it))}</span>`,true);};gr.appendChild(b);}
   const today=new Date().toISOString().slice(0,10);if(!S.adGamble||S.adGamble.d!==today)S.adGamble={d:today,n:0};
   if(ADS.canShow()&&S.adGamble.n<3){const b=document.createElement('button');b.id='btnAdGamble';b.textContent=`看廣告免費抽一次（今日剩 ${3-S.adGamble.n}）`;b.style.borderColor='#3c5fd6';b.onclick=()=>{b.disabled=true;ADS.rewarded(ok=>{b.disabled=false;if(!ok)return;S.adGamble.n++;const it=rollItem(8+S.tormentMax*8,{minq:1,mf:.3});S.stash.push(it);trimStash();save();renderTown();AU[it.q===3?'leg':'rare']();});};gr.appendChild(b);}
-  $('#btnMute').textContent=S.mute?'音效：關':'音效：開';$('#btnZoom2').textContent=zoomTxt();
+  $('#btnMute').textContent=S.mute?'音效：關':'音效：開';$('#btnMusic2').textContent=musicTxt();$('#btnZoom2').textContent=zoomTxt();
   S.talents=S.talents||{};const pts=talPoints();$('#tTalN').textContent=`可用 ${pts} 點（超凡 ${BAL.paragon(S.xpTotal)}）`;
-  const tb=$('#tTal');tb.innerHTML='';for(const t of TALENTS){const r=TL(t.id);const full=r>=t.max;const cost=full?0:talCost(t,r+1);const d=document.createElement('div');d.className='tn';d.innerHTML=`<b>${t.n}</b> <span class="rk">${r}/${t.max}</span><small>每級 ${t.per}</small>`;tb.appendChild(d);const b=document.createElement('button');b.textContent=full?'已滿':`+1（${cost} 點）`;b.disabled=full||pts<cost;b.onclick=()=>{if(talPoints()<cost||TL(t.id)>=t.max)return;S.talents[t.id]=TL(t.id)+1;save();AU.rare();renderTown();};tb.appendChild(b);}
+  const tb=$('#tTal');tb.innerHTML='';for(const t of TALENTS){const r=TL(t.id);const full=r>=t.max;const cost=full?0:talCost(t,r+1);const d=document.createElement('div');d.className='tn';d.innerHTML=`<b>${t.n}</b> <span class="rk">${r}/${t.max}</span><small>每級 ${t.per}</small>`;tb.appendChild(d);const b=document.createElement('button');b.textContent=full?'已滿':`+1（${cost} 點）`;b.disabled=full||pts<cost;b.onclick=()=>{if(talPoints()<cost||TL(t.id)>=t.max)return;S.talents[t.id]=TL(t.id)+1;TELE.ev('talent');save();AU.rare();renderTown();};tb.appendChild(b);}
   $('#btnTalReset').onclick=()=>{S.talents={};save();renderTown();toast('天賦已重置，點數全部退回');};
   S.codex=S.codex||{};for(const it of S.stash)if(it.leg)S.codex[it.leg]=1;
   $('#tCodexN').textContent=`${Object.keys(S.codex).filter(k=>LEGM[k]).length}/${LEGS.length}`;
   $('#tCodex').innerHTML=LEGS.map(l=>S.codex[l.id]?`<span class="on" title="${esc(SLOTN[l.s])}：${esc(l.p)}">${esc(l.n)}</span>`:`<span title="還沒撿到的${esc(SLOTN[l.s])}傳奇">？？？・${esc(SLOTN[l.s])}</span>`).join('');
 }
-function showScreen(id){for(const s of ['title','town','result'])$('#'+s).hidden=s!==id;$('#hud').hidden=id!=='';}
+function showScreen(id){MUSIC.play(id===''?'battle':'town');for(const s of ['title','town','result'])$('#'+s).hidden=s!==id;$('#hud').hidden=id!=='';}
 
 /* ---------------- title ---------------- */
 function drawClassIconOn(c,cls){const k=CLASSES[cls];c.translate(24,28);c.strokeStyle='#000';c.lineWidth=1.5;c.fillStyle='#2a221c';c.fillRect(-6,6,5,8);c.fillRect(1,6,5,8);c.fillStyle=cls==='barb'?'#5a2a1a':cls==='sorc'?'#2a3a7a':'#1e3a2a';c.beginPath();c.moveTo(-9,-6);c.lineTo(9,-6);c.lineTo(12,10);c.lineTo(-12,10);c.closePath();c.fill();c.stroke();c.fillStyle=k.color;c.fillRect(-8,-8,16,16);c.strokeRect(-8,-8,16,16);c.fillStyle=k.skin;c.beginPath();c.arc(0,-14,7,0,TAU);c.fill();c.stroke();c.fillStyle='#000';c.fillRect(2,-15,2,2);}
 function drawClassIcon(cv2,cls){const c=cv2.getContext('2d');cv2.width=cv2.height=48;const k=CLASSES[cls];c.fillStyle='#120d0b';c.fillRect(0,0,48,48);c.translate(24,28);c.strokeStyle='#000';c.lineWidth=1.5;c.fillStyle='#2a221c';c.fillRect(-6,6,5,8);c.fillRect(1,6,5,8);c.fillStyle=cls==='barb'?'#5a2a1a':cls==='sorc'?'#2a3a7a':'#1e3a2a';c.beginPath();c.moveTo(-9,-6);c.lineTo(9,-6);c.lineTo(12,10);c.lineTo(-12,10);c.closePath();c.fill();c.stroke();c.fillStyle=k.color;c.fillRect(-8,-8,16,16);c.strokeRect(-8,-8,16,16);c.fillStyle=k.skin;c.beginPath();c.arc(0,-14,7,0,TAU);c.fill();c.stroke();if(cls==='barb'){c.fillStyle='#3a2a1a';c.fillRect(-7,-20,14,4);c.fillStyle='#cfcfcf';c.fillRect(10,-22,4,26);c.strokeRect(10,-22,4,26);}else if(cls==='sorc'){c.fillStyle='#2a3a7a';c.beginPath();c.moveTo(-8,-18);c.lineTo(8,-18);c.lineTo(1,-32);c.closePath();c.fill();c.stroke();c.fillStyle='#5a3a1a';c.fillRect(10,-20,3,30);c.fillStyle='#8fa0ff';c.beginPath();c.arc(11.5,-23,4,0,TAU);c.fill();c.stroke();}else{c.fillStyle='#1e3a2a';c.beginPath();c.arc(0,-15,8,Math.PI,0);c.fill();c.stroke();c.fillStyle='#5a3a1a';c.fillRect(10,-20,3,30);c.fillStyle='#cfcfcf';c.beginPath();c.moveTo(11,-20);c.quadraticCurveTo(27,-26,23,-8);c.quadraticCurveTo(21,-18,11,-16);c.fill();c.stroke();}c.fillStyle='#000';c.fillRect(2,-15,2,2);}
-function renderTitle(){if(typeof TS_CARDS==='undefined')return;const row=$('#clsRow');row.innerHTML='';TS_CARDS=[];for(const [id,c] of Object.entries(CLASSES)){const d=document.createElement('div');d.className='cls'+(S.cls===id?' sel':'');const ic=document.createElement('canvas');ic.width=ic.height=120;TS_CARDS.push({cv:ic,ctx:ic.getContext('2d'),cls:id,col:c.color});d.appendChild(ic);d.insertAdjacentHTML('beforeend',`<h3>${c.name}</h3><p>${c.desc}</p><div class="stat"><span>生命 <b>${c.hp}</b></span><span>護甲 <b>${c.armor}</b></span><span>移速 <b>${c.ms}</b></span></div><div class="clsk">起手技 <b>${SKILLS[c.start].name}</b>　主動技 <b>${c.actName}</b></div>`);d.onclick=()=>{S.cls=id;save();renderTitle();};row.appendChild(d);}drawCards(0);}
+function renderTitle(){if(typeof TS_CARDS==='undefined')return;const row=$('#clsRow');row.innerHTML='';TS_CARDS=[];for(const [id,c] of Object.entries(CLASSES)){const d=document.createElement('div');d.className='cls'+(S.cls===id?' sel':'');const ic=document.createElement('canvas');ic.width=ic.height=120;TS_CARDS.push({cv:ic,ctx:ic.getContext('2d'),cls:id,col:c.color});d.appendChild(ic);d.insertAdjacentHTML('beforeend',`<h3>${c.name}</h3><p>${c.desc}</p><div class="stat"><span>生命 <b>${c.hp}</b></span><span>護甲 <b>${c.armor}</b></span><span>移速 <b>${c.ms}</b></span></div><div class="clsk">起手技 <b>${SKILLS[c.start].name}</b>　主動技 <b>${c.actName}</b></div>`);d.onclick=()=>{S.cls=id;save();renderTitle();};row.appendChild(d);}drawCards(0);setTitleCta();}
+function setTitleCta(){const first=(S.runs||0)===0;const q=$('#btnQuick'),t=$('#btnTown');q.hidden=!first;q.classList.toggle('cta',first);t.classList.toggle('cta',!first);t.classList.toggle('big',!first);t.textContent=first?'先逛城鎮':'進入城鎮';}
 
 /* ---------------- input ---------------- */
 const KEYMAP={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0],w:[0,-1],s:[0,1],a:[-1,0],d:[1,0],W:[0,-1],S:[0,1],A:[-1,0],D:[1,0]};
@@ -1612,7 +1633,7 @@ window.addEventListener('keydown',e=>{
   if((e.key==='r'||e.key==='R')&&!$('#lvl').hidden){rerollCards();return;}
   if(e.key===' '){useActive();e.preventDefault();}
   else if(e.key==='t'||e.key==='T')startTp();
-  else if(e.key==='m'||e.key==='M'){S.mute=!S.mute;save();toast(S.mute?'靜音':'音效開啟');}
+  else if(e.key==='m'||e.key==='M'){S.mute=!S.mute;MUSIC.refresh();save();toast(S.mute?'靜音':'音效開啟');}
   else if(e.key==='b'||e.key==='B'||e.key==='Tab'){e.preventDefault();if(!$('#bag').hidden)closeBag();else openBag();}
   else if(e.key==='Escape'){if(!$('#lvl').hidden||!$('#pk').hidden||!$('#death').hidden)return;if(!$('#bag').hidden){closeBag();return;}togglePause();}
   else if(/^[1234]$/.test(e.key)){const i=+e.key-1;if(!$('#death').hidden){if(i===0)reviveAccept();else if(i===1)reviveDecline();}else if(!$('#lvl').hidden&&G.curOffers){if(G.curOffers[i])chooseCard(G.curOffers[i]);}else if(!$('#pk').hidden&&i<3)pickDo(['eq','bag','salv'][i]);}
@@ -1629,18 +1650,22 @@ $('#btnAct').addEventListener('click',()=>{useActive()});
 $('#btnTp').addEventListener('click',()=>{startTp()});
 $('#hBag').addEventListener('click',()=>{if(!$('#bag').hidden)closeBag();else openBag();});
 $('#btnBagClose').addEventListener('click',closeBag);
-function togglePause(){if(!G||G.over||G.pendingDeath||ADS.showing)return;if(!$('#pause').hidden){$('#pause').hidden=true;G.paused=false;ADS.gameplayStart();}else{G.paused=true;$('#pause').hidden=false;ADS.gameplayStop();$('#btnMute2').textContent=S.mute?'音效：關':'音效：開';$('#btnRetro').textContent=retroTxt();$('#btnZoom').textContent=zoomTxt();}}
+function togglePause(){if(!G||G.over||G.pendingDeath||ADS.showing)return;if(!$('#pause').hidden){$('#pause').hidden=true;G.paused=false;ADS.gameplayStart();}else{G.paused=true;$('#pause').hidden=false;ADS.gameplayStop();$('#btnMute2').textContent=S.mute?'音效：關':'音效：開';$('#btnMusic').textContent=musicTxt();$('#btnRetro').textContent=retroTxt();$('#btnZoom').textContent=zoomTxt();}}
 $('#btnResume').onclick=togglePause;$('#btnPauseHud').onclick=()=>{if(G&&!G.over&&$('#lvl').hidden&&$('#pk').hidden&&$('#chest').hidden&&$('#gate').hidden&&$('#pact').hidden)togglePause();};
-$('#btnMute2').onclick=()=>{S.mute=!S.mute;save();$('#btnMute2').textContent=S.mute?'音效：關':'音效：開';};
+$('#btnMute2').onclick=()=>{S.mute=!S.mute;MUSIC.refresh();save();$('#btnMute2').textContent=S.mute?'音效：關':'音效：開';};
 const retroTxt=()=>'像素風：'+(S.retro?'開':'關');
+const musicTxt=()=>'音樂：'+(S.music===false?'關':'開');
+function toggleMusic(){S.music=S.music===false;save();MUSIC.refresh();for(const id of ['btnMusic','btnMusic2'])$('#'+id).textContent=musicTxt();}
+$('#btnMusic').onclick=toggleMusic;$('#btnMusic2').onclick=toggleMusic;
 const ZOOMS=[[0.8,'小'],[1,'中'],[1.25,'大']];const zoomTxt=()=>'畫面縮放：'+(ZOOMS.find(z=>z[0]===(S.zoom||1))||ZOOMS[1])[1];
 function cycleZoom(){const i=ZOOMS.findIndex(z=>z[0]===(S.zoom||1));S.zoom=ZOOMS[(i+1)%ZOOMS.length][0];save();resize();for(const id of ['btnZoom','btnZoom2'])$('#'+id).textContent=zoomTxt();}
 $('#btnZoom').onclick=cycleZoom;$('#btnZoom2').onclick=cycleZoom;
 function setRetro(v){S.retro=v;save();resize();$('#btnRetro').textContent=retroTxt();$('#btnRetro2').textContent=retroTxt();}
 $('#btnRetro').onclick=()=>setRetro(!S.retro);$('#btnRetro2').onclick=()=>setRetro(!S.retro);
 $('#btnGiveup').onclick=()=>{$('#pause').hidden=true;G.paused=false;G.lastDmgSrc={name:'自己'};endRun('dead');};
-$('#btnMute').onclick=()=>{S.mute=!S.mute;save();renderTown();};
-$('#btnTown').onclick=()=>{AU.init();renderTown();showScreen('town');};
+$('#btnMute').onclick=()=>{S.mute=!S.mute;MUSIC.refresh();save();renderTown();};
+$('#btnQuick').onclick=()=>{AU.init();TELE.ev('quick');S.map='grave';S.torment=1;save();startRun();};
+$('#btnTown').onclick=()=>{AU.init();TELE.ev('town');renderTown();showScreen('town');};
 $('#btnBack').onclick=()=>{renderTitle();showScreen('title');};
 $('#btnWipe').onclick=()=>{const b=$('#btnWipe');if(b.dataset.c){S=DEF();save();renderTitle();b.textContent='清除存檔';delete b.dataset.c;toast('存檔已清除');}else{b.textContent='再按一次確認清除';b.dataset.c='1';setTimeout(()=>{b.textContent='清除存檔';delete b.dataset.c;},3000);}};
 $('#btnRun').onclick=()=>{AU.init();startRun();};
@@ -1650,6 +1675,7 @@ function runLogText(){const h=(S.hist||[]).slice(-12);const lines=h.map(r=>`${r.
 const sendQuit=(kind)=>{try{if(G&&P&&!G.over&&G.started&&!G.quitSent&&G.t>20){G.quitSent=1;const stk=['chest','gate','pact','lvl','pk','bag','pause','death'].filter(id=>{const el=document.getElementById(id);return el&&!el.hidden;}).join(',');TELE.send('run',{map:S.map,tor:S.torment,cls:P.cls,kind,t:Math.round(G.t),lv:P.lv,kills:P.kills,yellow:P.bag.filter(i=>i.q>=2).length,leg:P.bag.filter(i=>i.q===3).length,killer:stk?'畫面:'+stk:'',revived:!!P.revived,runs:(S.runs||0)+1,depth:G.deep||0,pacts:(P.pacts||[]).join(','),combo:G.bestCombo||0,chests:G.chests||0});}}catch(e){}};
 window.addEventListener('pagehide',()=>sendQuit('quit'));
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')sendQuit('hide');});
+const TELE_EVS=new Set();
 const TELE={on:true,pid:'anon',base:(location.hostname.endsWith('pages.dev')?'':'https://bloodrift.pages.dev')+'/api'};
 try{TELE.pid=localStorage.getItem('bloodrift_pid')||'';if(!TELE.pid){TELE.pid=Array.from(crypto.getRandomValues(new Uint8Array(6)),b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('bloodrift_pid',TELE.pid);}}catch(e){}
 if(/^(localhost|127\.|\[::1\])/.test(location.hostname)&&!/[?&]tele=1/.test(location.search))TELE.on=false;
@@ -1657,6 +1683,7 @@ if(location.hostname.includes('claude'))TELE.on=false;
 TELE.platform=()=>{const h=location.hostname;return h.endsWith('pages.dev')?'cf':h.endsWith('github.io')?'github':h.includes('claude')?'artifact':(window.BR_PLATFORM||'other');};
 TELE.device=()=>/Mobi|Android/i.test(navigator.userAgent)?'mobile':'desktop';
 TELE.send=function(path,obj){if(!TELE.on)return false;try{obj.pid=TELE.pid;obj.ver=window.BR_VERSION||'dev';obj.platform=TELE.platform();obj.device=TELE.device();fetch(TELE.base+'/'+path,{method:'POST',body:JSON.stringify(obj),keepalive:true,mode:'cors',headers:{'content-type':'text/plain'}}).catch(()=>{});return true;}catch(e){return false;}};
+TELE.ev=function(e,val){if(TELE_EVS.has(e))return;TELE_EVS.add(e);if(!TELE.on)return;try{fetch(TELE.base+'/ev',{method:'POST',body:JSON.stringify({pid:TELE.pid,ver:window.BR_VERSION||'dev',platform:TELE.platform(),device:TELE.device(),ev:e,val:val||0}),keepalive:true,mode:'cors',headers:{'content-type':'text/plain'}}).catch(()=>{});}catch(err){}};
 function showFb(){$('#fbBox').hidden=false;$('#fbTxt').value='';$('#fbTxt').focus();}
 $('#btnFb').onclick=showFb;$('#btnFb2').onclick=showFb;$('#btnFb3').onclick=showFb;$('#btnFbClose').onclick=()=>{$('#fbBox').hidden=true;};
 $('#btnFbSend').onclick=()=>{const t=$('#fbTxt').value.trim();if(!t){toast('先寫一句話');return;}const ok=TELE.send('feedback',{text:t,cls:P?P.cls:S.cls,map:S.map,t:G?Math.round(G.t):0});$('#fbBox').hidden=true;toast(ok?'謝謝！已送給作者':(location.hostname.includes('claude')?'這個連結送不出去，請到 bloodrift.pages.dev 玩':'本機測試模式，沒有送出'));};
@@ -1664,7 +1691,7 @@ function showLog(){const t=runLogText();const ta=$('#logTxt');ta.value=t;$('#log
 $('#btnLog').onclick=showLog;$('#btnChest').onclick=e=>{e.stopPropagation();closeChest();};$('#chest').onclick=()=>closeChest();$('#btnForge').onclick=doForge;$('#btnForgeClose').onclick=()=>{$('#forge').hidden=true;FORGE=null;};$('#btnPactNo').onclick=()=>pactChoose(null);$('#btnLog2').onclick=showLog;$('#btnLogClose').onclick=()=>{$('#logBox').hidden=true;};
 $('#btnRevive').onclick=reviveAccept;$('#btnDie').onclick=reviveDecline;
 function showStartHint(){const touch=('ontouchstart' in window)||navigator.maxTouchPoints>0;const h=$('#startHint');h.innerHTML=touch?'按住畫面左半邊，拖曳移動<small>技能會自動攻擊；開始移動，怪物才會出現</small>':'用 <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 或方向鍵移動<small>技能會自動攻擊；開始移動，怪物才會出現</small>';h.hidden=false;}
-function startRun(){$('#lvl').hidden=true;$('#chest').hidden=true;$('#gate').hidden=true;$('#pact').hidden=true;$('#pk').hidden=true;$('#pause').hidden=true;$('#bag').hidden=true;$('#death').hidden=true;newRun();showScreen('');updateHud();ADS.gameplayStart();showStartHint();}
+function startRun(){TELE.ev(TELE_EVS.has('run_start')?'run_again':'run_start',S.runs||0);$('#lvl').hidden=true;$('#chest').hidden=true;$('#gate').hidden=true;$('#pact').hidden=true;$('#pk').hidden=true;$('#pause').hidden=true;$('#bag').hidden=true;$('#death').hidden=true;newRun();showScreen('');updateHud();ADS.gameplayStart();showStartHint();}
 
 /* ---------------- ads / platform（CrazyGames SDK v3；其他平台為 none；?ads=mock 本機模擬） ---------------- */
 const ADS={env:'none',ready:false,sdk:null,lastAd:0,showing:false,everPlayed:false,prevPaused:null,
@@ -1711,7 +1738,7 @@ window.addEventListener('unhandledrejection',e=>{showErr('promise: '+(e.reason&&
 let frameErr=0;
 function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;try{if(G&&!G.over)update(dt);else if(G&&G.over&&!G.paused){G.endT+=dt;for(let i=FX.length-1;i>=0;i--){FX[i].t+=dt;if(FX[i].t>=FX[i].life)FX.splice(i,1);}}render();}catch(e){if(frameErr++<3)showErr(String(e.stack||e).slice(0,300));}requestAnimationFrame(frame);}
 window.addEventListener('resize',resize);
-async function boot(){load();TELE.send('ping',{w:innerWidth,h:innerHeight});resize();renderTitle();$('#btnRetro2').textContent=retroTxt();showScreen('title');requestAnimationFrame(frame);await ADS.init();ADS.loadingStart();renderTitle();ADS.loadingStop();}
+async function boot(){load();try{if(!localStorage.getItem('bloodrift_seen')){localStorage.setItem('bloodrift_seen','1');TELE.ev('first_visit');}}catch(e){}TELE.ev('title');TELE.send('ping',{w:innerWidth,h:innerHeight});resize();renderTitle();$('#btnRetro2').textContent=retroTxt();showScreen('title');requestAnimationFrame(frame);await ADS.init();ADS.loadingStart();renderTitle();ADS.loadingStop();}
 if(window.claude&&window.claude.hot&&window.claude.hot.ready)window.claude.hot.ready(boot);else boot();
 
 /* ---------------- debug / simulation ---------------- */
@@ -1720,7 +1747,7 @@ window.__br={get S(){return S},get G(){return G},get P(){return P},get E(){retur
   snap(w=960,h=540){W=w;H=h;DPR=1;PX=S.retro?Math.max(1,Math.round(Math.sqrt(W*H)/700)):1;IS=1/PX;cv.width=Math.round(W*IS);cv.height=Math.round(H*IS);ov.width=W;ov.height=H;if(!lightCv){lightCv=document.createElement('canvas');lcx=lightCv.getContext('2d');}lightCv.width=cv.width;lightCv.height=cv.height;CAM.z=clamp(Math.min(W,H)/640,.62,1.15)*(S.zoom||1);if(P){CAM.x=P.x;CAM.y=P.y;}render();const t=document.createElement('canvas');t.width=W;t.height=H;const c=t.getContext('2d');c.imageSmoothingEnabled=false;c.drawImage(cv,0,0,W,H);c.drawImage(ov,0,0,W,H);return t.toDataURL('image/png');},
   build(sk,ps,evo){P.skills=sk;P.passives=ps||{};P.evo=evo||{};calcStats();P.hp=ST.hpMax;try{buildHudSkills();}catch(e){}},
   get IT(){return IT},get FX(){return FX},get MORT(){return MORT},spawnBoss,spawnElitePack,render,resize,postProcess,counts(){return {E:E.length,FX:FX.length,PR:PR.length,EP:EP.length,PART:PART.length,BL:BL.length,BODIES:BODIES.length,GEMS:GEMS.length,GOLD:GOLD.length,IT:IT.length,FIRE:FIRE.length,CLOUD:CLOUD.length,M:M.length,LIGHTS:typeof LIGHTS!=='undefined'?LIGHTS.length:-1};},
-  pactNow(){spawnPactAltar();},get IN(){return IN},get CAM(){return CAM},urnHere(){URNS.push({x:P.x+20,y:P.y,ph:0});},get URNS(){return URNS},breakUrnRoll(r){const o=Math.random;Math.random=()=>r;try{breakUrn({x:P.x,y:P.y,ph:0});}finally{Math.random=o;}},openForge,doForge,pactForce(k){$('#pact').hidden=false;G.paused=true;pactChoose(k);},hurt(d){hurtPlayer(d,{name:'test'});},gateNow(){G.gateT=.01;},get PACTS(){return PACTS},TL,talPoints,
+  pactNow(){spawnPactAltar();},get MUSIC(){return MUSIC},get TELE_EVS(){return TELE_EVS},get IN(){return IN},get CAM(){return CAM},urnHere(){URNS.push({x:P.x+20,y:P.y,ph:0});},get URNS(){return URNS},breakUrnRoll(r){const o=Math.random;Math.random=()=>r;try{breakUrn({x:P.x,y:P.y,ph:0});}finally{Math.random=o;}},openForge,doForge,pactForce(k){$('#pact').hidden=false;G.paused=true;pactChoose(k);},hurt(d){hurtPlayer(d,{name:'test'});},gateNow(){G.gateT=.01;},get PACTS(){return PACTS},TL,talPoints,
   dropChest(n=3,boss=false){CHESTS.push({x:P.x+40,y:P.y-30,n,boss,t:0});},get CHESTS(){return CHESTS},
   dropLeg(dx=60,dy=-30){dropItem(P.x+dx,P.y+dy,{minq:3});},
   giveLeg(){const it=rollItem(30,{q:3});it.found=true;IT.push({x:P.x+5,y:P.y+5,it,t:1});},
