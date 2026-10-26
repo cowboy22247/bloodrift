@@ -24,7 +24,7 @@
 }
 [hidden]{display:none!important}
 html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);overflow:hidden;-webkit-user-select:none;user-select:none;touch-action:none;font-size:14px;line-height:1.45}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);overflow:hidden;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:none;font-size:14px;line-height:1.45}
 #app{position:relative;width:100%;height:100%;overflow:hidden}
 canvas#cv{position:absolute;inset:0;width:100%;height:100%;display:block;background:#0a0708;image-rendering:pixelated;image-rendering:crisp-edges}
 canvas#ov{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
@@ -182,6 +182,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
   .cta{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:6;width:min(92vw,420px);box-shadow:0 6px 28px rgba(0,0,0,.85),0 0 0 1px rgba(217,166,74,.4)}
   #town .npc{order:-1}
 }
+@media (min-width:701px){#title>.row{position:sticky;bottom:12px;z-index:5;padding:8px 14px;border-radius:6px;background:rgba(10,7,8,.78);box-shadow:0 6px 24px rgba(0,0,0,.6)}} /* 視窗矮（平台 iframe）時開始鈕也看得到 */
 .toast.long{animation-duration:7s;max-width:min(520px,90vw);white-space:normal;border-color:var(--gold);background:rgba(20,13,11,.92)}
 @keyframes tfade{0%{opacity:0;transform:translateY(6px)}10%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0}}
 #chan{position:absolute;left:50%;top:60%;transform:translateX(-50%);width:220px;text-align:center;font-size:13px;color:#bcd0ff;text-shadow:0 1px 2px #000}
@@ -306,7 +307,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
     <div class="row"><button id="btnRestore" hidden>看廣告保留全部戰利品</button><button class="big cta" id="btnResTown">回城</button><button id="btnLog">複製遊玩紀錄</button><button id="btnFb">意見回饋</button></div>
   </div>
 </div>
-<script>window.BR_PLATFORM="web";window.BR_VERSION="20261026-1947";</script>
+<script>window.BR_PLATFORM="web";window.BR_VERSION="20261026-2153";</script>
 <script>
 (()=>{
 'use strict';
@@ -510,7 +511,7 @@ const AU={ctx:null,last:0,
 /* ---------------- 背景音樂（music/*.mp3，Web Audio 無縫循環） ---------------- */
 const MUSIC={cur:null,want:'town',buf:{},loading:{},src:null,og:null,vol:.34,
   on(){return !S.mute&&S.music!==false;},
-  async load(k){if(this.buf[k]!==undefined||this.loading[k]||!AU.ctx)return;this.loading[k]=1;try{const r=await fetch('music/'+k+'.mp3');if(!r.ok)throw new Error(r.status);const ab=await r.arrayBuffer();this.buf[k]=await new Promise((res,rej)=>AU.ctx.decodeAudioData(ab,res,rej));}catch(e){this.buf[k]=null;}this.loading[k]=0;if(this.want===k)this.play(k,true);},
+  async load(k){if(this.buf[k]!==undefined||this.loading[k]||!AU.ctx)return;this.loading[k]=1;try{const r=await fetch((window.BR_MUSIC_DIR!=null?window.BR_MUSIC_DIR:'music/')+k+'.mp3');if(!r.ok)throw new Error(r.status);const ab=await r.arrayBuffer();this.buf[k]=await new Promise((res,rej)=>AU.ctx.decodeAudioData(ab,res,rej));}catch(e){this.buf[k]=null;}this.loading[k]=0;if(this.want===k)this.play(k,true);},
   play(k,force){this.want=k;if(!AU.ctx)return;if(!this.on()){this.stop();return;}if(this.cur===k&&this.src&&!force)return;const b=this.buf[k];if(b===undefined){this.load(k);return;}if(!b)return;
     const c=AU.ctx,t=c.currentTime;this.fadeOut(1.2);const g=c.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(this.vol,t+1.6);const s=c.createBufferSource();s.buffer=b;s.loop=true;s.connect(g).connect(c.destination);s.start(t);this.src=s;this.og=g;this.cur=k;},
   fadeOut(d){if(!this.src||!AU.ctx)return;const t=AU.ctx.currentTime,g=this.og,s=this.src;try{g.gain.cancelScheduledValues(t);g.gain.setValueAtTime(g.gain.value,t);g.gain.linearRampToValueAtTime(0,t+d);s.stop(t+d+.05);}catch(e){}this.src=null;this.cur=null;},
@@ -518,6 +519,8 @@ const MUSIC={cur:null,want:'town',buf:{},loading:{},src:null,og:null,vol:.34,
   refresh(){if(!this.on())this.stop();else this.play(this.want,true);},
 };
 document.addEventListener('pointerdown',()=>AU.init(),{passive:true});
+// iOS 只認 touchend／click 這類手勢才能恢復 AudioContext
+document.addEventListener('touchend',()=>AU.init(),{passive:true});document.addEventListener('click',()=>AU.init());
 document.addEventListener('visibilitychange',()=>{if(!AU.ctx)return;if(document.visibilityState==='hidden')AU.ctx.suspend();else if(!AU.adMute)AU.ctx.resume();});
 /* ---------------- items ---------------- */
 let uid=0; const nid=()=>(Date.now().toString(36)+(uid++).toString(36));
@@ -1743,7 +1746,9 @@ window.addEventListener('unhandledrejection',e=>{showErr('promise: '+(e.reason&&
 let frameErr=0;
 function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;try{if(G&&!G.over)update(dt);else if(G&&G.over&&!G.paused){G.endT+=dt;for(let i=FX.length-1;i>=0;i--){FX[i].t+=dt;if(FX[i].t>=FX[i].life)FX.splice(i,1);}}render();}catch(e){if(frameErr++<3)showErr(String(e.stack||e).slice(0,300));}requestAnimationFrame(frame);}
 window.addEventListener('resize',resize);
-async function boot(){load();try{if(!localStorage.getItem('bloodrift_seen')){localStorage.setItem('bloodrift_seen','1');TELE.ev('first_visit');}}catch(e){}TELE.ev('title');TELE.send('ping',{w:innerWidth,h:innerHeight});resize();renderTitle();$('#btnRetro2').textContent=retroTxt();showScreen('title');requestAnimationFrame(frame);await ADS.init();ADS.loadingStart();renderTitle();ADS.loadingStop();}
+async function boot(){load();try{if(!localStorage.getItem('bloodrift_seen')){localStorage.setItem('bloodrift_seen','1');TELE.ev('first_visit');}}catch(e){}TELE.ev('title');TELE.send('ping',{w:innerWidth,h:innerHeight});resize();renderTitle();$('#btnRetro2').textContent=retroTxt();showScreen('title');requestAnimationFrame(frame);await ADS.init();ADS.loadingStart();renderTitle();ADS.loadingStop();
+  // CrazyGames：第一次來的玩家直接進戰鬥（平台看「點進來有多少人開始玩」，正式上架也要求直接進遊戲）
+  if(window.BR_PLATFORM==='crazygames'&&(S.runs||0)===0&&!G)$('#btnQuick').click();}
 if(window.claude&&window.claude.hot&&window.claude.hot.ready)window.claude.hot.ready(boot);else boot();
 
 /* ---------------- debug / simulation ---------------- */
