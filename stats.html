@@ -6,7 +6,7 @@
 const API='https://bloodrift.pages.dev/api/stats';const $=s=>document.querySelector(s);
 const fmt=t=>t==null?'-':Math.floor(t/60)+':'+String(t%60).padStart(2,'0');const dt=ts=>new Date(ts*1000).toLocaleString('zh-TW',{hour12:false,month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
 const esc=x=>String(x==null?'':x).replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
-const KIND={dead:'死亡',tp:'回城',win:'通關'},CLS={barb:'野蠻人',sorc:'女巫',necro:'死靈法師'},MAP={grave:'墓園',crypt:'地窖'};
+const KIND={dead:'死亡',tp:'回城',win:'通關',hide:'切走沒回來',quit:'關掉網頁'},CLS={barb:'野蠻人',sorc:'女巫',necro:'死靈法師'},MAP={grave:'墓園',crypt:'地窖'};
 const tbl=(rows,cols)=>rows&&rows.length?'<div class="wrap"><table><tr>'+cols.map(c=>'<th>'+c[0]+'</th>').join('')+'</tr>'+rows.map(r=>'<tr>'+cols.map(c=>'<td>'+esc(c[1](r))+'</td>').join('')+'</tr>').join('')+'</table></div>':'<div class="dim">還沒有資料</div>';
 const STEPS=[['first_visit','第一次打開'],['title','看到標題'],['quick','按立即開始'],['town','進城鎮'],['run_start','開始一局'],['moved','開始移動'],['lvl1','第一次升級'],['t60','撐過 1 分鐘'],['t180','撐過 3 分鐘'],['boss1','打倒第一隻首領'],['t300','撐過 5 分鐘'],['result','打完一局'],['run_again','再開一局'],['t600','撐過 10 分鐘'],['gate','看到深淵之門'],['deep','選擇深入'],['chest1','開過寶箱'],['pact1','碰過契約'],['urn1','撞過罐子'],['forge','打開鐵匠'],['talent','點過天賦'],['death1','死過'],['tp_try','用過回城']];
 function funnel(d){const m=Object.fromEntries((d.funnel||[]).map(x=>[x.ev,x.players]));const base=m.first_visit||m.title||1;const mx=Math.max(1,...Object.values(m));
