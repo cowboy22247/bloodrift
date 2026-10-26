@@ -306,7 +306,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
     <div class="row"><button id="btnRestore" hidden>看廣告保留全部戰利品</button><button class="big cta" id="btnResTown">回城</button><button id="btnLog">複製遊玩紀錄</button><button id="btnFb">意見回饋</button></div>
   </div>
 </div>
-<script>window.BR_PLATFORM="web";window.BR_VERSION="20261026-1106";</script>
+<script>window.BR_PLATFORM="web";window.BR_VERSION="20261026-1947";</script>
 <script>
 (()=>{
 'use strict';
@@ -1196,7 +1196,7 @@ function onDeath(){
 }
 function reviveAccept(){
   if(!G||!G.pendingDeath)return;$('#death').hidden=true;
-  ADS.rewarded(ok=>{G.pendingDeath=false;if(ok){P.revived=true;P.hp=ST.hpMax;P.inv=3;near(P.x,P.y,240,e=>{if(e.boss)return;const a=Math.atan2(e.y-P.y,e.x-P.x);e.x+=Math.cos(a)*180;e.y+=Math.sin(a)*180;});FX.push({k:'pillar',x:P.x,y:P.y,t:0,life:2});AU.leg();toast('復活！');G.paused=false;}else{G.paused=false;endRun('dead');}});
+  ADS.rewarded(ok=>{G.pendingDeath=false;if(ok){P.revived=true;P.hp=ST.hpMax;P.inv=3;near(P.x,P.y,240,e=>{if(e.boss)return;const a=Math.atan2(e.y-P.y,e.x-P.x);e.x+=Math.cos(a)*180;e.y+=Math.sin(a)*180;});FX.push({k:'pillar',x:P.x,y:P.y,t:0,life:2});AU.leg();toast('復活！');G.paused=false;}else{toast('廣告暫時無法播放');G.paused=false;endRun('dead');}});
 }
 function reviveDecline(){if(!G||!G.pendingDeath)return;$('#death').hidden=true;G.pendingDeath=false;G.paused=false;endRun('dead');}
 function endRun(kind){
@@ -1496,6 +1496,8 @@ function drawMinion(m){const y=m.y+Math.sin(m.ph)*1.5;cx.fillStyle='rgba(0,0,0,.
 function drawPlayer(){
   const c=CLASSES[P.cls];const x=P.x,y=P.y;
   cx.fillStyle='rgba(0,0,0,.45)';cx.beginPath();cx.ellipse(x,y+12,12,5,0,0,TAU);cx.fill();
+  // 腳底金色光環：怪多的時候一眼找到自己
+  {cx.save();cx.scale(1,.42);const gy=(y+12)/.42,g=cx.createRadialGradient(x,gy,0,x,gy,26);g.addColorStop(0,'rgba(255,190,90,.38)');g.addColorStop(1,'rgba(255,190,90,0)');cx.fillStyle=g;cx.beginPath();cx.arc(x,(y+12)/.42,26,0,TAU);cx.fill();cx.restore();cx.strokeStyle='rgba(255,214,140,.75)';cx.lineWidth=1.5;cx.beginPath();cx.ellipse(x,y+12,19,8,0,0,TAU);cx.stroke();}
   const MK=P.buffs.morph>0&&P.morph&&SPR[P.morph]&&SPR[P.morph].ok?P.morph:null;
   if(MK){const A=SPR[MK].meta.actions;const dir=dirIndex(P.dx,P.dy);const fr=P.moving?(P.walk*1.1)%A.walk.frames:0;cx.save();cx.globalCompositeOperation='lighter';const gg=cx.createRadialGradient(x,y-20,0,x,y-20,60);gg.addColorStop(0,'rgba(200,120,255,.35)');gg.addColorStop(1,'rgba(160,80,255,0)');cx.fillStyle=gg;cx.fillRect(x-60,y-80,120,120);cx.restore();drawSprite(MK,'walk',fr,x,y,104,dir);}
   else if(SPR[P.cls]&&SPR[P.cls].ok){const A=SPR[P.cls].meta.actions;const dir=dirIndex(P.dx,P.dy);let act='walk',fr=0;if(P.actAnim>0){act='attack';fr=(1-P.actAnim/.4)*A.attack.frames;}else if(P.moving)fr=(P.walk*1.3)%A.walk.frames;drawSprite(P.cls,act,fr,x,y,46,dir,(P.inv>0&&Math.floor(G.t*20)%2===0)?.5:undefined);}
@@ -1604,7 +1606,7 @@ function renderTown(){
   $('#nemDesc').textContent=S.nemesis?`復仇者：${BOSSES[S.nemesis].name} 殺過你，下一局會更強、也掉更多。`:'';
   const gr=$('#gambleRow');gr.innerHTML='';for(const [sl,nm] of SLOTS){const b=document.createElement('button');b.textContent=nm;b.disabled=S.gold<500;b.onclick=()=>{if(S.gold<500)return;S.gold-=500;const it=rollItem(8+S.tormentMax*8,{slot:sl,minq:1,mf:.3});S.stash.push(it);trimStash();save();renderTown();AU[it.q===3?'leg':'rare']();toast(`莫德給了你 <span class="q${it.q}">${esc(itemName(it))}</span>`,true);};gr.appendChild(b);}
   const today=new Date().toISOString().slice(0,10);if(!S.adGamble||S.adGamble.d!==today)S.adGamble={d:today,n:0};
-  if(ADS.canShow()&&S.adGamble.n<3){const b=document.createElement('button');b.id='btnAdGamble';b.textContent=`看廣告免費抽一次（今日剩 ${3-S.adGamble.n}）`;b.style.borderColor='#3c5fd6';b.onclick=()=>{b.disabled=true;ADS.rewarded(ok=>{b.disabled=false;if(!ok)return;S.adGamble.n++;const it=rollItem(8+S.tormentMax*8,{minq:1,mf:.3});S.stash.push(it);trimStash();save();renderTown();AU[it.q===3?'leg':'rare']();});};gr.appendChild(b);}
+  if(ADS.canShow()&&S.adGamble.n<3){const b=document.createElement('button');b.id='btnAdGamble';b.textContent=`看廣告免費抽一次（今日剩 ${3-S.adGamble.n}）`;b.style.borderColor='#3c5fd6';b.onclick=()=>{b.disabled=true;ADS.rewarded(ok=>{b.disabled=false;if(!ok){toast('廣告暫時無法播放');if(!ADS.canShow())b.remove();return;}S.adGamble.n++;const it=rollItem(8+S.tormentMax*8,{minq:1,mf:.3});S.stash.push(it);trimStash();save();renderTown();AU[it.q===3?'leg':'rare']();});};gr.appendChild(b);}
   $('#btnMute').textContent=S.mute?'音效：關':'音效：開';$('#btnMusic2').textContent=musicTxt();$('#btnZoom2').textContent=zoomTxt();
   S.talents=S.talents||{};const pts=talPoints();$('#tTalN').textContent=`可用 ${pts} 點（超凡 ${BAL.paragon(S.xpTotal)}）`;
   const tb=$('#tTal');tb.innerHTML='';for(const t of TALENTS){const r=TL(t.id);const full=r>=t.max;const cost=full?0:talCost(t,r+1);const d=document.createElement('div');d.className='tn';d.innerHTML=`<b>${t.n}</b> <span class="rk">${r}/${t.max}</span><small>每級 ${t.per}</small>`;tb.appendChild(d);const b=document.createElement('button');b.textContent=full?'已滿':`+1（${cost} 點）`;b.disabled=full||pts<cost;b.onclick=()=>{if(talPoints()<cost||TL(t.id)>=t.max)return;S.talents[t.id]=TL(t.id)+1;TELE.ev('talent');save();AU.rare();renderTown();};tb.appendChild(b);}
@@ -1682,6 +1684,7 @@ const TELE={on:true,pid:'anon',base:(location.hostname.endsWith('pages.dev')?'':
 try{TELE.pid=localStorage.getItem('bloodrift_pid')||'';if(!TELE.pid){TELE.pid=Array.from(crypto.getRandomValues(new Uint8Array(6)),b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('bloodrift_pid',TELE.pid);}}catch(e){}
 if(/^(localhost|127\.|\[::1\])/.test(location.hostname)&&!/[?&]tele=1/.test(location.search))TELE.on=false;
 if(location.hostname.includes('claude'))TELE.on=false;
+if(window.BR_PLATFORM==='crazygames')TELE.on=false; // CrazyGames 版只用平台自己的統計，不回傳自家伺服器（免隱私聲明）
 TELE.platform=()=>{const h=location.hostname;return h.endsWith('pages.dev')?'cf':h.endsWith('github.io')?'github':h.includes('claude')?'artifact':(window.BR_PLATFORM||'other');};
 TELE.device=()=>(/Mobi|Android/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Macintosh/.test(navigator.userAgent)))?'mobile':'desktop';
 TELE.send=function(path,obj){if(!TELE.on)return false;try{obj.pid=TELE.pid;obj.ver=window.BR_VERSION||'dev';obj.platform=TELE.platform();obj.device=TELE.device();fetch(TELE.base+'/'+path,{method:'POST',body:JSON.stringify(obj),keepalive:true,mode:'cors',headers:{'content-type':'text/plain'}}).catch(()=>{});return true;}catch(e){return false;}};
@@ -1696,7 +1699,7 @@ function showStartHint(){const touch=('ontouchstart' in window)||navigator.maxTo
 function startRun(){TELE.ev(TELE_EVS.has('run_start')?'run_again':'run_start',S.runs||0);$('#lvl').hidden=true;$('#chest').hidden=true;$('#gate').hidden=true;$('#pact').hidden=true;$('#pk').hidden=true;$('#pause').hidden=true;$('#bag').hidden=true;$('#death').hidden=true;newRun();showScreen('');updateHud();ADS.gameplayStart();showStartHint();}
 
 /* ---------------- ads / platform（CrazyGames SDK v3；其他平台為 none；?ads=mock 本機模擬） ---------------- */
-const ADS={env:'none',ready:false,sdk:null,lastAd:0,showing:false,everPlayed:false,prevPaused:null,
+const ADS={env:'none',ready:false,sdk:null,lastAd:0,showing:false,everPlayed:false,prevPaused:null,fails:0,
   async init(){
     if(window.BR_PLATFORM==='crazygames'&&window.CrazyGames&&window.CrazyGames.SDK){
       try{this.sdk=window.CrazyGames.SDK;await this.sdk.init();this.env='crazygames';this.ready=true;
@@ -1704,7 +1707,7 @@ const ADS={env:'none',ready:false,sdk:null,lastAd:0,showing:false,everPlayed:fal
       }catch(e){console.warn('CrazyGames SDK init failed',e);}
     }else if(/[?&]ads=mock/.test(location.search)){this.env='mock';this.ready=true;}
   },
-  canShow(){return this.ready&&!this.showing;},
+  canShow(){return this.ready&&!this.showing&&this.fails<2;},
   _begin(){this.showing=true;AU.adMute=true;try{if(AU.ctx&&AU.ctx.state==='running')AU.ctx.suspend();}catch(e){}this.prevPaused=G?G.paused:null;if(G)G.paused=true;},
   _end(){this.showing=false;AU.adMute=false;try{if(AU.ctx&&!document.hidden)AU.ctx.resume();}catch(e){}this.lastAd=performance.now();if(G&&this.prevPaused!==null)G.paused=this.prevPaused;},
   rewarded(done){
@@ -1712,7 +1715,7 @@ const ADS={env:'none',ready:false,sdk:null,lastAd:0,showing:false,everPlayed:fal
     this._begin();
     if(this.env==='mock'){mockAd('獎勵廣告模擬',3,ok=>{this._end();done(ok);});return;}
     let fin=false;
-    try{this.sdk.ad.requestAd('rewarded',{adStarted:()=>{},adFinished:()=>{if(fin)return;fin=true;this._end();done(true);},adError:()=>{if(fin)return;fin=true;this._end();done(false);}});}
+    try{this.sdk.ad.requestAd('rewarded',{adStarted:()=>{},adFinished:()=>{if(fin)return;fin=true;this.fails=0;this._end();done(true);},adError:()=>{if(fin)return;fin=true;this.fails++;this._end();done(false);}});}
     catch(e){this._end();done(false);}
   },
   midgame(cb){
@@ -1720,7 +1723,7 @@ const ADS={env:'none',ready:false,sdk:null,lastAd:0,showing:false,everPlayed:fal
     this._begin();
     if(this.env==='mock'){mockAd('插頁廣告模擬',2,()=>{this._end();cb();});return;}
     let fin=false;
-    try{this.sdk.ad.requestAd('midgame',{adStarted:()=>{},adFinished:()=>{if(fin)return;fin=true;this._end();cb();},adError:()=>{if(fin)return;fin=true;this._end();cb();}});}
+    try{this.sdk.ad.requestAd('midgame',{adStarted:()=>{},adFinished:()=>{if(fin)return;fin=true;this.fails=0;this._end();cb();},adError:()=>{if(fin)return;fin=true;this.fails++;this._end();cb();}});}
     catch(e){this._end();cb();}
   },
   gameplayStart(){this.everPlayed=true;try{this.sdk&&this.sdk.game.gameplayStart();}catch(e){}},
