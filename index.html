@@ -211,6 +211,8 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
 @keyframes hurt{0%{box-shadow:inset 0 0 80px rgba(200,20,20,.7)}100%{box-shadow:inset 0 0 0 transparent}}
 /* modals */
 .modal>*{margin:auto}
+/* 320px 小手機：視窗框（14px 邊框＋內距）不能把盒子撐出螢幕 */
+@media (max-width:400px){.modal>div{box-sizing:border-box;max-width:100%}}
 .modal{position:absolute;inset:0;z-index:20;background:rgba(5,3,3,.72);display:flex;align-items:flex-start;justify-content:flex-start;padding:16px;box-sizing:border-box;overflow:auto}
 .modal h2{font-family:var(--font-display);letter-spacing:.14em;color:#f0e2c8;text-align:center;margin:0 0 14px;font-size:22px;text-shadow:0 0 14px rgba(217,166,74,.5)}
 .cards{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;max-width:860px}
@@ -299,7 +301,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
         <p>500 金幣，隨機一件至少魔法品質的裝備。選部位：</p>
         <div class="row" id="gambleRow"></div>
         <h2 class="sec" style="margin-top:6px">說明</h2>
-        <p class="help">每局 10 分鐘。3:00 剁骨者、6:30 蛛后、10:00 深淵看守者。<br>精英怪身上有詞綴（疾速、燃跡、霜環…），黃色領隊必掉裝備，有機會掉<b style="color:#ffd84a">寶箱</b>（1～5 個免費升級，一局開越多越難掉）。<br>連殺達到 150、340、640……觸發<b style="color:#ff9a6a">殺戮狂熱</b>：吸光水晶、6 秒攻速移速提升，連殺中斷就重新算。升級時可以按 R 重抽（每局 2 次）。<br>白／藍裝自動分解成金幣；黃／橘裝會跳比較卡。<br><b style="color:#ffd84a">問號罐子</b>：撞破會掉金幣、烤肉、磁鐵、炸彈，稀有的無敵之星和變身卷軸。<br><b style="color:#ffd27a">鐵匠強化</b>：倉庫裡按「強化」，+1～+10，+7 以上失敗會蒸發。<br><b style="color:#ff9a8a">惡魔契約</b>：4:30、7:30 出現血紅祭壇，三選一的強力契約，每個都有代價。<br><b style="color:#d9a0ff">深淵之門</b>：打倒深淵看守者後，可以選擇回城，或深入裂隙賭更好的寶物。<br><b style="color:#bcd0ff">回城符</b>：5:00 之後可用，吟唱 5 秒不能動，成功就把全部戰利品帶回城。<br><b style="color:#ffb0a0">死亡</b>：本局撿到的裝備隨機掉一半。殺死你的首領下一局會變成「復仇者」。<br><b style="color:#c890ff">裂隙裂口</b>：每局隨機出現一次，碰到就湧出紫色怪潮，殺一隻多撐 0.15 秒（最長 24 秒），撐完依擊殺數開 1／3／5 層寶箱。<br><b style="color:#d9b8ff">魂匣</b>：倉庫裡的傳奇按「萃取」，特效永久收進魂匣，每局都生效。<br><b style="color:#ffd84a">每日懸賞</b>：每天三個小目標，回城領金幣和裝備，三個全清再送一件傳奇。<br>打倒 10:00 的守護者解鎖下一個煉獄等級。</p>
+        <p class="help">每局 10 分鐘。3:00 剁骨者、6:30 蛛后、10:00 深淵看守者。<br>精英怪身上有詞綴（疾速、燃跡、霜環…），黃色領隊必掉裝備，有機會掉<b style="color:#ffd84a">寶箱</b>（1～5 個免費升級，一局開越多越難掉）。<br>連殺達到 150、340、640……觸發<b style="color:#ff9a6a">殺戮狂熱</b>：吸光水晶、6 秒攻速移速提升，連殺中斷就重新算。升級時可以按 R 重抽（每局 2 次）。<br>白／藍裝自動分解成金幣；黃／橘裝會跳比較卡。<br><b style="color:#ffd84a">問號罐子</b>：撞破會掉金幣、烤肉、磁鐵、炸彈，稀有的無敵之星和變身卷軸。<br><b style="color:#ffd27a">鐵匠強化</b>：倉庫裡按「強化」，+1～+10，+7 以上失敗會蒸發。<br><b style="color:#ff9a8a">惡魔契約</b>：4:30、7:30 出現血紅祭壇，三選一的強力契約，每個都有代價。<br><b style="color:#d9a0ff">深淵之門</b>：打倒深淵看守者後，可以選擇回城，或深入裂隙賭更好的寶物。<br><b style="color:#bcd0ff">回城符</b>：5:00 之後可用，吟唱 5 秒不能動，成功就把全部戰利品帶回城。<br><b style="color:#ffb0a0">死亡</b>：本局撿到的裝備隨機掉一半。殺死你的首領下一局會變成「復仇者」。<br><b style="color:#c890ff">裂隙裂口</b>：每局隨機出現一次，碰到就湧出紫色怪潮，殺一隻多撐 0.15 秒（最長 24 秒），撐完依擊殺數開 1／3／5 層寶箱。<br><b style="color:#d9b8ff">魂匣</b>：倉庫裡的傳奇按「萃取」，特效永久收進魂匣，每局都生效。<br><b style="color:#ffd84a">每日懸賞</b>：每天三個小目標，回城領金幣和裝備，三個全清再送一件傳奇。<br>打倒 10:00 的守護者解鎖下一個煉獄等級。<br><b style="color:#e8c45a">聖騎士</b>：通關煉獄 3 解鎖第 4 個職業。</p>
         <div class="row"><button id="btnBack">回標題</button><button id="btnMute"></button><button id="btnMusic2"></button><button id="btnZoom2"></button><button id="btnLog2">複製遊玩紀錄</button><button id="btnFb3">意見回饋</button></div>
       </section>
     </div>
@@ -325,7 +327,7 @@ select{font-family:inherit;background:#100c0a;color:var(--ink);border:1px solid 
     <div class="row"><button id="btnRestore" hidden>看廣告保留全部戰利品</button><button class="big cta" id="btnResTown">回城</button><button id="btnLog">複製遊玩紀錄</button><button id="btnFb">意見回饋</button></div>
   </div>
 </div>
-<script>window.BR_PLATFORM="web";window.BR_VERSION="20261027-0957";</script>
+<script>window.BR_PLATFORM="web";window.BR_VERSION="20261027-2051";</script>
 <script>
 (()=>{
 'use strict';
@@ -508,7 +510,9 @@ const DEF=()=>({v:1,cls:'barb',stash:[],eq:{barb:{},sorc:{},necro:{},pal:{}},unl
 let S=DEF();
 function load(){try{const r=localStorage.getItem(SAVE_KEY);if(r){const o=JSON.parse(r);S=Object.assign(DEF(),o);if(!S.eq)S.eq={barb:{},sorc:{},necro:{}};for(const k of Object.keys(CLASSES))if(!S.eq[k])S.eq[k]={};unlockCheck();}}catch(e){}}
 function save(){const j=JSON.stringify(S);try{localStorage.setItem(SAVE_KEY,j)}catch(e){}try{ADS.setItem(SAVE_KEY,j);}catch(e){}}
-function trimStash(){while(S.stash.length>80){const eqIds=new Set(Object.values(S.eq).flatMap(o=>Object.values(o)));const i=S.stash.findIndex(x=>!eqIds.has(x.id));if(i<0)break;S.stash.splice(i,1);}}
+function trimStash(keep){if(S.stash.length<=80)return;const eqIds=new Set(Object.values(S.eq).flatMap(o=>Object.values(o)));let n=0,g=0;
+  while(S.stash.length>80){let bi=-1,bs=1e9;for(let i=0;i<S.stash.length;i++){const x=S.stash[i];if(eqIds.has(x.id)||(keep&&keep.includes(x)))continue;const sc=x.q*1000+(x.en||0)*60+itemScore(x);if(sc<bs){bs=sc;bi=i;}}if(bi<0)break;const x=S.stash.splice(bi,1)[0];if(x.leg){S.codex=S.codex||{};S.codex[x.leg]=1;}g+=(x.q+1)*15+Math.round(x.ilvl/2);n++;}
+  if(n){S.gold+=g;toast(`倉庫滿了（80 格）：自動分解 ${n} 件最差的裝備，換得 ${g} 金幣`,false,true);}}
 const stashItem=id=>S.stash.find(i=>i.id===id);
 
 /* ---------------- audio (synth) ---------------- */
@@ -647,8 +651,8 @@ function bounty(ev,n){const B=S.bounty||bountyDay();for(const r of B.list){const
 function bountyClaim(r){
   const d=BM[r.id];if(!d||r.p<d.n||r.c)return;r.c=1;S.gold+=d.g;
   const it=rollItem(8+S.tormentMax*8,{minq:2,mf:.3});S.stash.push(it);let msg=`懸賞獎勵：${d.g} 金幣＋<span class="q${it.q}">${esc(itemName(it))}</span>`;
-  const B=S.bounty;if(B.list.every(x=>x.c)&&!B.all){B.all=1;const lg=rollItem(10+S.tormentMax*8,{q:3});S.stash.push(lg);msg+=`<br>三個全清！大獎：<span class="q3">${esc(itemName(lg))}</span>`;}
-  trimStash();TELE.ev('bounty');save();AU.leg();toast(msg,true,true);
+  const B=S.bounty;const got=[it];if(B.list.every(x=>x.c)&&!B.all){B.all=1;const lg=rollItem(10+S.tormentMax*8,{q:3});S.stash.push(lg);got.push(lg);msg+=`<br>三個全清！大獎：<span class="q3">${esc(itemName(lg))}</span>`;}
+  trimStash(got);TELE.ev('bounty');save();AU.leg();toast(msg,true,true);
 }
 function renderBounty(){
   const B=bountyDay();const box=$('#tBounty');box.innerHTML='';const done=B.list.filter(x=>x.c).length;
@@ -900,8 +904,9 @@ function drawBreach(){
   cx.save();cx.globalCompositeOperation='lighter';const g=cx.createRadialGradient(b.x,b.y,R*.2,b.x,b.y,R);g.addColorStop(0,'rgba(120,50,200,.08)');g.addColorStop(.85,'rgba(150,70,240,.14)');g.addColorStop(1,'rgba(190,120,255,.32)');cx.fillStyle=g;cx.beginPath();cx.arc(b.x,b.y,R,0,TAU);cx.fill();cx.restore();
   cx.strokeStyle='rgba(205,150,255,.85)';cx.lineWidth=3;cx.setLineDash([14,10]);cx.lineDashOffset=-G.t*40;cx.beginPath();cx.arc(b.x,b.y,R,0,TAU);cx.stroke();cx.setLineDash([]);
 }
-// 裂口倒數固定畫在畫面下方（圈子大時，圈上的字會跑出畫面）
-function drawBreachHud(){const b=G.breach;if(!b||b.st!=='open')return;const t=`裂口 ${Math.max(0,b.tm).toFixed(1)} 秒 · 擊殺 ${b.k}`+(b.k>=200?'（5 層寶箱）':b.k>=90?'（3 層寶箱）':'');ox.font='bold 15px "Noto Serif TC",serif';ox.textAlign='center';const w=ox.measureText(t).width+20,y=H-128;ox.fillStyle='rgba(20,8,34,.78)';ox.fillRect(W/2-w/2,y-17,w,24);ox.strokeStyle='rgba(190,120,255,.8)';ox.lineWidth=1;ox.strokeRect(W/2-w/2+.5,y-16.5,w-1,23);ox.fillStyle='#e2c2ff';ox.fillText(t,W/2,y);}
+// 裂口倒數固定畫在上方 HUD 底下（圈子大時圈上的字會跑出畫面；放下方在手機會被技能圖示蓋住）
+function hudBottomY(){const now=performance.now();if(G._hudYt&&now-G._hudYt<500)return G._hudY;let y=60;for(const q of ['.toprow','#combo','#bossbar','#btnPauseHud']){const e=document.querySelector(q);if(!e||e.hidden)continue;const r=e.getBoundingClientRect();if(r.height&&r.bottom<H*.4)y=Math.max(y,r.bottom);}G._hudYt=now;G._hudY=y;return y;}
+function drawBreachHud(){const b=G.breach;if(!b||b.st!=='open')return;const t=`裂口 ${Math.max(0,b.tm).toFixed(1)} 秒 · 擊殺 ${b.k}`+(b.k>=200?'（5 層寶箱）':b.k>=90?'（3 層寶箱）':'');ox.font='bold 15px "Noto Serif TC",serif';ox.textAlign='center';const w=ox.measureText(t).width+20,y=hudBottomY()+24;ox.fillStyle='rgba(20,8,34,.78)';ox.fillRect(W/2-w/2,y-17,w,24);ox.strokeStyle='rgba(190,120,255,.8)';ox.lineWidth=1;ox.strokeRect(W/2-w/2+.5,y-16.5,w-1,23);ox.fillStyle='#e2c2ff';ox.fillText(t,W/2,y);}
 function spawnPactAltar(){
   const a=rnd(TAU),d=260;G.pactAltar={x:P.x+Math.cos(a)*d,y:P.y+Math.sin(a)*d,t:45};
   toast('惡魔契約祭壇出現了（45 秒內走過去）',false,true);AU.rare();
@@ -1707,7 +1712,7 @@ function renderTown(){
   // stash
   const eqIds=new Set(Object.values(S.eq).flatMap(o=>Object.values(o)));
   const box=$('#tStash');box.innerHTML='';const sorted=S.stash.slice().sort((a,b)=>b.q-a.q||itemScore(b)-itemScore(a));
-  $('#tCnt').textContent=`${S.stash.length}/80`;
+  $('#tCnt').textContent=`${S.stash.length}/80`+(S.stash.length>=76?'（快滿了：滿了會自動分解最差的）':'');$('#tCnt').style.color=S.stash.length>=76?'#ff9a8a':'';
   if(!sorted.length)box.innerHTML='<div class="empty">倉庫是空的。進裂隙撿黃色或橘色裝備，活著回來就會放在這裡。</div>';
   for(const it of sorted){const d=document.createElement('div');d.className='sti';const isEq=eqIds.has(it.id);const mine=S.eq[S.cls]&&S.eq[S.cls][it.slot]===it.id;
     d.innerHTML=`<span class="sl">${SLOTN[it.slot]}</span><span class="nm q${it.q}">${esc(itemName(it))}</span>${isEq?`<span class="eqd">${mine?'已裝備':'他職裝備'}</span>`:''}${it.leg&&LEGM[it.leg]&&!cubeOf().got[it.leg]?'<button data-a="cube">萃取</button>':''}<button data-a="en">強化</button><button data-a="salv">分解</button>`;
@@ -1724,9 +1729,9 @@ function renderTown(){
   S.torment=clamp(S.torment,1,S.tormentMax);sel.value=S.torment;$('#torDesc').textContent=tormentDesc(S.torment);
   sel.onchange=()=>{S.torment=+sel.value;save();$('#torDesc').textContent=tormentDesc(S.torment);};
   $('#nemDesc').textContent=S.nemesis?`復仇者：${BOSSES[S.nemesis].name} 殺過你，下一局會更強、也掉更多。`:'';
-  const gr=$('#gambleRow');gr.innerHTML='';for(const [sl,nm] of SLOTS){const b=document.createElement('button');b.textContent=nm;b.disabled=S.gold<500;b.onclick=()=>{if(S.gold<500)return;S.gold-=500;const it=rollItem(8+S.tormentMax*8,{slot:sl,minq:1,mf:.3});S.stash.push(it);trimStash();save();renderTown();AU[it.q===3?'leg':'rare']();toast(`莫德給了你 <span class="q${it.q}">${esc(itemName(it))}</span>`,true);};gr.appendChild(b);}
+  const gr=$('#gambleRow');gr.innerHTML='';for(const [sl,nm] of SLOTS){const b=document.createElement('button');b.textContent=nm;b.disabled=S.gold<500;b.onclick=()=>{if(S.gold<500)return;S.gold-=500;const it=rollItem(8+S.tormentMax*8,{slot:sl,minq:1,mf:.3});S.stash.push(it);trimStash([it]);save();renderTown();AU[it.q===3?'leg':'rare']();toast(`莫德給了你 <span class="q${it.q}">${esc(itemName(it))}</span>`,true);};gr.appendChild(b);}
   const today=new Date().toISOString().slice(0,10);if(!S.adGamble||S.adGamble.d!==today)S.adGamble={d:today,n:0};
-  if(ADS.canShow()&&S.adGamble.n<3){const b=document.createElement('button');b.id='btnAdGamble';b.textContent=`看廣告免費抽一次（今日剩 ${3-S.adGamble.n}）`;b.style.borderColor='#3c5fd6';b.onclick=()=>{b.disabled=true;ADS.rewarded(ok=>{b.disabled=false;if(!ok){toast('廣告暫時無法播放');if(!ADS.canShow())b.remove();return;}S.adGamble.n++;const it=rollItem(8+S.tormentMax*8,{minq:1,mf:.3});S.stash.push(it);trimStash();save();renderTown();AU[it.q===3?'leg':'rare']();});};gr.appendChild(b);}
+  if(ADS.canShow()&&S.adGamble.n<3){const b=document.createElement('button');b.id='btnAdGamble';b.textContent=`看廣告免費抽一次（今日剩 ${3-S.adGamble.n}）`;b.style.borderColor='#3c5fd6';b.onclick=()=>{b.disabled=true;ADS.rewarded(ok=>{b.disabled=false;if(!ok){toast('廣告暫時無法播放');if(!ADS.canShow())b.remove();return;}S.adGamble.n++;const it=rollItem(8+S.tormentMax*8,{minq:1,mf:.3});S.stash.push(it);trimStash([it]);save();renderTown();AU[it.q===3?'leg':'rare']();});};gr.appendChild(b);}
   $('#btnMute').textContent=S.mute?'音效：關':'音效：開';$('#btnMusic2').textContent=musicTxt();$('#btnZoom2').textContent=zoomTxt();
   S.talents=S.talents||{};const pts=talPoints();$('#tTalN').textContent=`可用 ${pts} 點（超凡 ${BAL.paragon(S.xpTotal)}）`;
   const tb=$('#tTal');tb.innerHTML='';for(const t of TALENTS){const r=TL(t.id);const full=r>=t.max;const cost=full?0:talCost(t,r+1);const d=document.createElement('div');d.className='tn';d.innerHTML=`<b>${t.n}</b> <span class="rk">${r}/${t.max}</span><small>每級 ${t.per}</small>`;tb.appendChild(d);const b=document.createElement('button');b.textContent=full?'已滿':`+1（${cost} 點）`;b.disabled=full||pts<cost;b.onclick=()=>{if(talPoints()<cost||TL(t.id)>=t.max)return;S.talents[t.id]=TL(t.id)+1;TELE.ev('talent');save();AU.rare();renderTown();};tb.appendChild(b);}
